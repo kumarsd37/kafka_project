@@ -1,0 +1,232 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>framework package &#8212; kafka_project 1.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="framework" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="framework-package">
+<h1>framework package<a class="headerlink" href="#framework-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-framework.http_utils">
+<span id="framework-http-utils-module"></span><h2>framework.http_utils module<a class="headerlink" href="#module-framework.http_utils" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.http_utils.HttpClient">
+<em class="property">class </em><code class="descclassname">framework.http_utils.</code><code class="descname">HttpClient</code><span class="sig-paren">(</span><em>max_retries=1</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">requests.sessions.Session</span></code></p>
+<p>This class is supposed to retry requests that do return temporary errors.</p>
+<p>At this moment it supports: 502, 503, 504</p>
+<dl class="method">
+<dt id="framework.http_utils.HttpClient.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient.delete" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.http_utils.HttpClient.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient.get" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.http_utils.HttpClient.head">
+<code class="descname">head</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient.head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient.head" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.http_utils.HttpClient.options">
+<code class="descname">options</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient.options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.http_utils.HttpClient.patch">
+<code class="descname">patch</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient.patch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient.patch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.http_utils.HttpClient.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient.post"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient.post" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.http_utils.HttpClient.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>url</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpClient.put"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpClient.put" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="framework.http_utils.HttpError">
+<em class="property">exception </em><code class="descclassname">framework.http_utils.</code><code class="descname">HttpError</code><span class="sig-paren">(</span><em>status_code=None</em>, <em>text=None</em>, <em>url=None</em>, <em>request=None</em>, <em>response=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#HttpError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.HttpError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">Exception</span></code></p>
+<p>General error raised for all problems in operation of the Http client.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="framework.http_utils.NullHandler">
+<em class="property">class </em><code class="descclassname">framework.http_utils.</code><code class="descname">NullHandler</code><span class="sig-paren">(</span><em>level=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#NullHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.NullHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">logging.Handler</span></code></p>
+<dl class="method">
+<dt id="framework.http_utils.NullHandler.emit">
+<code class="descname">emit</code><span class="sig-paren">(</span><em>record</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#NullHandler.emit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.NullHandler.emit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="framework.http_utils.raise_on_error">
+<code class="descclassname">framework.http_utils.</code><code class="descname">raise_on_error</code><span class="sig-paren">(</span><em>r</em>, <em>verb='???'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/http_utils.html#raise_on_error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.http_utils.raise_on_error" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-framework.splunk">
+<span id="framework-splunk-module"></span><h2>framework.splunk module<a class="headerlink" href="#module-framework.splunk" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.splunk.SplunkClient">
+<em class="property">class </em><code class="descclassname">framework.splunk.</code><code class="descname">SplunkClient</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/splunk.html#SplunkClient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.splunk.SplunkClient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<dl class="method">
+<dt id="framework.splunk.SplunkClient.sendToSplunk">
+<code class="descname">sendToSplunk</code><span class="sig-paren">(</span><em>data=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/splunk.html#SplunkClient.sendToSplunk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.splunk.SplunkClient.sendToSplunk" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt>
+<code class="descname">sendToSplunk</code><span class="sig-paren">(</span><em>host='http://localhost:8089/services/receivers/simple'</em>, <em>response=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/framework/splunk.html#SplunkClient.sendToSplunk"><span class="viewcode-link">[source]</span></a></dt>
+<dd></dd></dl>
+
+<p>send data to splunk.</p>
+<p>refer <a class="reference internal" href="#framework.http_utils.HttpClient" title="framework.http_utils.HttpClient"><code class="xref py py-class docutils literal"><span class="pre">http_utils.HttpClient</span></code></a></p>
+<p>sample data send to splunk is str format of JSON</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;messageId&quot;</span><span class="p">:</span> <span class="s2">&quot;e9de01c97136472190da3557527b1d2b&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;success&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>response</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – raw event to send</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-even field"><td>&#160;</td><td class="field-body"><ul class="first last simple">
+<li><em>auth</em> (<code class="docutils literal"><span class="pre">tuple</span></code>) –
+username(<code class="docutils literal"><span class="pre">str</span></code>) , password(<code class="docutils literal"><span class="pre">str</span></code>)</li>
+<li><em>params</em> (<code class="docutils literal"><span class="pre">dict</span></code>) –
+index(<code class="docutils literal"><span class="pre">str</span></code>), source(<code class="docutils literal"><span class="pre">str</span></code>), and sourcetype(<code class="docutils literal"><span class="pre">str</span></code>)</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>:raises HttpError</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-framework" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">kafka_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">framework package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-framework.http_utils">framework.http_utils module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-framework.splunk">framework.splunk module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-framework">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">framework</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, pavan.tummalapalli@gmail.com.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.9</a>
+      
+      |
+      <a href="_sources/framework.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

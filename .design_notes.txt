@@ -1,0 +1,18 @@
+{
+   consumer_settings: {
+
+        if client offset is true:
+            give db settings.
+
+        check with kafka client settings.
+   },
+
+   producer_settings: {
+
+   },
+
+   num_of_workers:
+
+
+
+}
