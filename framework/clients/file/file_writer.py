@@ -12,22 +12,22 @@ logger = logging.getLogger(__name__)
 class Event:
 
     def __init__(self):
-        self.set = False
+        self._set = False
 
     def set(self):
-        self.set = True
+        self._set = True
 
     def is_set(self):
-        return self.set
+        return self._set
 
     def clear(self):
-        self.set = True
+        self._set = True
 
 
 class FileWriter(AbstractProducer):
     """ class for writing to a file with concurrent support """
 
-    def __init__(self, file, mode='w', encoding=None, max_queue_size=None):
+    def __init__(self, file=None, mode='w', encoding=None, max_queue_size=None):
         """
         constructor for creating a file handler
         :param file: file to open
@@ -76,15 +76,19 @@ class FileWriter(AbstractProducer):
         """
         self.queue.put(message)
 
+    def _write_to_file(self):
+        message = self.queue.get()
+        self.queue.task_done()
+        self._file_handler.write(message)
+        self._file_handler.flush()
+
+
     def _write(self):
         """
         get the message from the queue and writes to file.
         """
         while True:
-            message = self.queue.get()
-            self.queue.task_done()
-            self._file_handler.write(message)
-            self._file_handler.flush()
+            self._write_to_file()
             if not self.event.is_set():
                 break
 
@@ -94,9 +98,9 @@ class FileWriter(AbstractProducer):
         :return:
         :rtype:
         """
-        thread = threading.Thread(target=self._write)
-        thread.start()
-        thread.join()
+        self.thread = threading.Thread(target=self._write)
+        self.thread.setDaemon(True)
+        self.thread.start()
 
     def close(self, *args, **kwargs):
         """
@@ -107,9 +111,14 @@ class FileWriter(AbstractProducer):
             self.event.clear()
 
         while not self.queue.empty():
-            pass
+            logger.info('queue size is {}'.format(self.queue.qsize()))
+            self._write_to_file()
 
+        logger.info('queue size is {}'.format(self.queue.qsize()))
         self._file_handler.close()
+
+
+
 
 
 

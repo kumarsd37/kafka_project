@@ -25,7 +25,7 @@ class Consumer(AbstractConsumer):
 
         try:
             self.consumer_client = KafkaConsumer(**kwargs.get('client_config'))
-            self.subscribe(topics=self.topics)
+            self.subscribe(topics=self.topics, enable_listener=kwargs.get('enable_listener'))
         except KafkaError as exc:
             raise exc
 

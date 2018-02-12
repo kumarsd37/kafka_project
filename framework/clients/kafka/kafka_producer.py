@@ -47,6 +47,7 @@ class Producer(AbstractProducer):
         """
         assert kwargs, 'unrecognized keyword arguments'
         self.configs = kwargs
+        self.topic = self.configs.get('topic')
         assert self.configs.get('client_config'), 'unrecognized client_config'
 
         self._success_callback = kwargs.get('success_callback')
@@ -59,6 +60,9 @@ class Producer(AbstractProducer):
 
     def pre_send(self, *args, **kwargs):
         pass
+
+    def send(self, message):
+        self.send_sync(topic=self.topic, key=None, value=message, partition=None, timestamp_ms=None)
 
     def _send(self, topic=None, key=None, value=None, partition=None, timestamp_ms=None):
         """
@@ -81,13 +85,13 @@ class Producer(AbstractProducer):
         """
 
         try:
-            future = self.producer_client.send(self, topic=topic, key=key, value=value, partition=partition, timestamp_ms=timestamp_ms)
+            future = self.producer_client.send(topic=topic, key=key, value=value, partition=partition, timestamp_ms=timestamp_ms)
             return future
         except KafkaError as e:
             logger.error(e, exc_info=True)
             raise e
 
-    def send(self, topic=None, key=None, value=None, partition=None, timestamp_ms=None):
+    def send_sync(self, topic=None, key=None, value=None, partition=None, timestamp_ms=None):
         """
         publish the message to topic synchronously and return meta_data or if it fails to send,
         it will raise an exception.
@@ -167,12 +171,14 @@ class Producer(AbstractProducer):
     def serialize_message(self, message, *args, **kwargs):
         pass
 
-
     def close(self):
         try:
             logger.info('closing producer...')
             self.producer_client.close(timeout=self.configs.get('close_timeout') or 5)
         except KafkaError as e:
             raise e
+
+
+# todo : keys , partitions for sending in kafka need to initialing the producer client
 
 
