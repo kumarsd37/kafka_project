@@ -1,4 +1,5 @@
+.idea/
 .idea/*
-/.design_notes.txt
-/build_docs/
+.design_notes.txt
+build_docs/
 
