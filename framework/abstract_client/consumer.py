@@ -9,16 +9,20 @@ class AbstractConsumer(ABC):
     """
 
     @abstractmethod
+    def pre_consume(self, *args, **kwargs):
+        """ operations to be performed before consume method call """
+
+    @abstractmethod
     def consume(self, *args, **kwargs):
         """ consumes the messages """
 
     @abstractmethod
-    def close(self, *args, **kwargs):
-        """ close the consumer """
+    def post_consume(self, *args, **kwargs):
+        """ operations to be performed after consume method call """
 
     @abstractmethod
-    def serialize_message(self, message, *args, **kwargs):
-        """ serialize the message"""
+    def close(self, *args, **kwargs):
+        """ close the consumer """
 
     @abstractmethod
     def deserialize_message(self, message, *args, **kwargs):

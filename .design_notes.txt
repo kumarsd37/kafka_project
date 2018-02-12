@@ -16,3 +16,29 @@
 
 
 }
+
+
+
+pip installations:
+
+install hdfs:
+# pip install hdfs
+
+install elasticsearch:
+# pip install elasticsearch
+
+install influxdb
+# pip install --upgrade influxdb
+
+install kerberos we need the following package to be installed.
+# apt-get install libkrb5-dev
+# pip install kerberos
+
+install mongodb:
+# python -m pip install pymongo
+
+install mongodb with specific version.
+# python -m pip install pymongo==3.1.1
+
+install mongodb with dependencies
+# python -m pip install pymongo[gssapi,srv,tls]

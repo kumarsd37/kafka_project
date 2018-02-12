@@ -14,17 +14,20 @@ logger = logging.getLogger(__name__)
 class Consumer(AbstractConsumer):
 
     def __init__(self, **kwargs):
-
         assert kwargs , 'unrecognized configs'
         assert kwargs.get('client_config'), 'unrecognized client config'
         self.kwargs = kwargs
+
+        self.consumer_rebalance_listener = None
+        self.topics = kwargs.get('topics')
 
         super().__init__()
 
         try:
             self.consumer_client = KafkaConsumer(**kwargs.get('client_config'))
-        except KafkaError as e:
-            raise e
+            self.subscribe(topics=self.topics)
+        except KafkaError as exc:
+            raise exc
 
     def subscribe(self, topics, enable_listener=False):
         logger.info('subscribing to topics {}'.format(topics))
@@ -33,8 +36,8 @@ class Consumer(AbstractConsumer):
         try:
             self.consumer_rebalance_listener = self.getRebalanceListener(enable_listener=enable_listener)
             self.consumer_client.subscribe(topics, listener=self.consumer_rebalance_listener)
-        except (KafkaError, Exception) as e:
-            raise e
+        except (KafkaError, Exception) as exc:
+            raise exc
 
     def seek(self, topic_partition, offset):
         """
@@ -49,9 +52,9 @@ class Consumer(AbstractConsumer):
         try:
 
             self.consumer_client.seek(topic_partition, offset)
-        except KafkaError as e:
+        except KafkaError as exc:
             logger.exception('cant seek to specific offset')
-            raise e
+            raise exc
 
     def initial_poll(self, max_retries, timeout_ms=0):
         """
@@ -119,6 +122,8 @@ class Consumer(AbstractConsumer):
         Get the first offset for the given partitions.
         This method does not change the current consumer position of the partitions.
 
+        :param topic_partitions:
+        :type TopicPartition
         .. note::
             This method may block indefinitely if the partition does not exist.
 
@@ -131,8 +136,8 @@ class Consumer(AbstractConsumer):
         try:
             res = self.consumer_client.beginning_offsets(topic_partitions)
             return res
-        except KafkaError as e:
-            raise e
+        except KafkaError as exc:
+            raise exc
 
     def seek_to_beginning(self, topic_partitions):
         """
@@ -145,8 +150,11 @@ class Consumer(AbstractConsumer):
         try:
             res = self.consumer_client.seek_to_beginning(topic_partitions)
             return res
-        except KafkaError as e:
-            raise e
+        except KafkaError as exc:
+            raise exc
+
+    def pre_consume(self, *args, **kwargs):
+        pass
 
     def consume(self, *args, **kwargs):
         timeout = kwargs.get('timeout') or self.kwargs.get('timeout') or 5
@@ -163,8 +171,11 @@ class Consumer(AbstractConsumer):
                         messages.append(consumerRecord)
             return messages
 
-        except (KafkaError, Exception) as e:
-            raise e
+        except (KafkaError, Exception) as exc:
+            raise exc
+
+    def post_consume(self, *args, **kwargs):
+        pass
 
     def commit(self, topic_partition_offset=None):
         """
@@ -182,8 +193,8 @@ class Consumer(AbstractConsumer):
             offsets = None
         try:
             self.consumer_client.commit(offsets=offsets)
-        except CommitFailedError as e:
-            raise e
+        except CommitFailedError as exc:
+            raise exc
 
     def commit_async(self, offsets=None, callback=None):
         """
@@ -202,8 +213,8 @@ class Consumer(AbstractConsumer):
         """
         try:
             self.consumer_client.commit_async(offsets, callback)
-        except KafkaError as e:
-            raise e
+        except KafkaError as exc:
+            raise exc
 
     def partitions_for_topic(self, topic):
         """
@@ -217,8 +228,8 @@ class Consumer(AbstractConsumer):
         try:
             partitions = self.consumer_client.partitions_for_topic(topic)
             return partitions
-        except KafkaError as e:
-            raise e
+        except KafkaError as exc:
+            raise exc
 
     class HandleRebalanceListener(ConsumerRebalanceListener):
         """
@@ -247,9 +258,6 @@ class Consumer(AbstractConsumer):
             return Consumer.HandleRebalanceListener(self.consumer_client)
         else:
             return None
-
-    def serialize_message(self, message, *args, **kwargs):
-        pass
 
     def deserialize_message(self, message, *args, **kwargs):
         pass
