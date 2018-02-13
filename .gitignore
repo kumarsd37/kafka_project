@@ -3,3 +3,12 @@
 design_notes.txt
 build_docs/
 framework/AppMain.py
+__pycache__/
+*.py[cod]
+*/__pycache__/*
+
+framework/__pycache__/
+framework/abstract_client/__pycache__/
+framework/clients/__pycache__/
+framework/clients/file/__pycache__/
+framework/clients/kafka/__pycache__/
