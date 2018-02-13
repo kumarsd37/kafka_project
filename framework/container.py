@@ -1,8 +1,8 @@
-import threading
+import json
 
 __author__ = 'pavan.tummalapalli'
 
-from worker import Worker
+from framework.worker import Worker
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,8 +18,16 @@ class Container:
     __outbound_client_settings = None
     
     @staticmethod
-    def create_container(msg_processor, **kwargs):
+    def create_container(msg_processor, settings_json):
         #__class__.__error_handler = error_handler
+        try:
+            kwargs = json.loads(settings_json)
+
+        except json.JSONDecodeError as exc:
+            raise exc
+        except AttributeError as exc:
+            raise exc
+
         __class__.__num_of_workers = kwargs.get('num_of_workers')
         __class__.__inbound_client_settings = kwargs.get('inbound_client_settings')
         __class__.__outbound_client_settings = kwargs.get('outbound_client_settings')
@@ -65,6 +73,14 @@ class Container:
     @staticmethod
     def get_metrics():
         pass
+
+# todo: clients in container only, so that it will helps in scaling things for thread safe clients.
+# todo: settings or clients need to be passed at constructor level.
+# todo: for not thread safe clients we need to call corresponding methods to create clients.
+
+
+
+
 
 
 

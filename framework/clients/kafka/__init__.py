@@ -1,7 +1,7 @@
 __author__ = 'pavan.tummalapalli'
 
 
-from clients.kafka.kafka_producer import Producer
-from clients.kafka.kafka_consumer import Consumer
+from framework.clients.kafka.kafka_producer import Producer
+from framework.clients.kafka.kafka_consumer import Consumer
 
-__all__ = [Producer, Consumer]
+__all__ = ['Producer', 'Consumer']

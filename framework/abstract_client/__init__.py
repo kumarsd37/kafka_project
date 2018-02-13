@@ -1,7 +1,7 @@
 __author__ = 'pavan.tummalapalli'
 
 
-from .consumer import AbstractConsumer
-from .producer import AbstractProducer
+from framework.abstract_client.consumer import AbstractConsumer
+from framework.abstract_client.producer import AbstractProducer
 
 __all__ = [AbstractProducer, AbstractConsumer]

@@ -74,13 +74,13 @@ class KafkaLoggingHandler(logging.Handler):
 
     def __init__(self, hosts_list, topic, **kwargs):
         """
-        constructor for kafka logging handler.
+        constructor for kafka_client logging handler.
 
         :param hosts_list: bootstrap_servers
         :type hosts_list: union(str, list)
         :param topic: topic to send to logs
         :type topic: str
-        :param kwargs: Additional kafka producer keyword arguments
+        :param kwargs: Additional kafka_client producer keyword arguments
         :type kwargs: dict
         """
         logging.Handler.__init__(self)

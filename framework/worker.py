@@ -1,10 +1,9 @@
 __author__ = 'pavan.tummalapalli'
 
-import threading
 from threading import Thread, Event
 import logging
 
-from clients_initializations import client_initialize_mappings
+from framework.clients_initializations import client_initialize_mappings
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +30,7 @@ class Worker(Thread):
         try:
             result = self.message_processor(message)
             logger.debug('result returned by message processor {}'.format(result))
-            self.outbound_client.send(result.value)
+            self.outbound_client.send(result)
         except Exception as exc:
             logger.error(exc, exc_info=True)
 
@@ -63,7 +62,6 @@ class Worker(Thread):
     def loop(self):
         while True:
             messages = self.inbound_client.consume()
-            logger.info(self.ident)
             if messages is not None:
                 # for each message in batch we are processing the further process.
                 for message in messages:
@@ -74,5 +72,9 @@ class Worker(Thread):
     def close(self):
         self.inbound_client.close()
         self.outbound_client.close()
+
+# todo: need to work with post_send()
+# this need to be configurable from worker settings.
+
 
 

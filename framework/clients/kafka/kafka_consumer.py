@@ -6,7 +6,8 @@ from kafka import KafkaConsumer, ConsumerRebalanceListener, OffsetAndMetadata, T
 from kafka.errors import KafkaError, CommitFailedError
 from six import iteritems
 
-from abstract_client import AbstractConsumer
+
+from framework.abstract_client import AbstractConsumer
 
 logger = logging.getLogger(__name__)
 
@@ -198,7 +199,7 @@ class Consumer(AbstractConsumer):
 
     def commit_async(self, offsets=None, callback=None):
         """
-        Commit offsets to kafka asynchronously, optionally firing callback.
+        Commit offsets to kafka_client asynchronously, optionally firing callback.
         This commits offsets only to Kafka.
         The offsets committed using this API will be used on the first fetch after every rebalance and also on startup.
         As such, if you need to store offsets in anything other than Kafka, this API should not be used.

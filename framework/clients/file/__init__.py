@@ -1,5 +1,5 @@
 __author__ = 'pavan.tummalapalli'
 
-from clients.file.file_writer import FileWriter
+from framework.clients.file.file_writer import FileWriter
 
-__all__ = [FileWriter]
+__all__ = ['FileWriter']

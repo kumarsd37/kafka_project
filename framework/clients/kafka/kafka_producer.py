@@ -5,7 +5,7 @@ import logging
 from kafka import KafkaProducer
 from kafka.errors import KafkaError, KafkaTimeoutError
 
-from abstract_client import AbstractProducer
+from framework.abstract_client import AbstractProducer
 
 logger = logging.getLogger(__name__)
 
@@ -122,7 +122,7 @@ class Producer(AbstractProducer):
 
     def send_async(self, topic=None, key=None, value=None, partition=None, timestamp_ms=None):
         """
-        publish the message to kafka asynchronously. if success and failure callback handlers exists,
+        publish the message to kafka_client asynchronously. if success and failure callback handlers exists,
         it will add to the FutureRecordMetadata
 
         :param topic: topic where the message will be published
@@ -179,6 +179,6 @@ class Producer(AbstractProducer):
             raise e
 
 
-# todo : keys , partitions for sending in kafka need to initialing the producer client
+# todo : keys , partitions for sending in kafka_client need to initialing the producer client
 
 

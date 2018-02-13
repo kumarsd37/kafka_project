@@ -4,10 +4,10 @@ __author__ = 'pavan.tummalapalli'
 import logging
 
 from kafka.errors import NoBrokersAvailable, KafkaError
-from clients.file import FileWriter
 
-from clients.kafka import Consumer
-from clients.kafka import Producer
+from framework.clients.file import FileWriter
+from framework.clients.kafka import Consumer
+from framework.clients.kafka import Producer
 
 logger = logging.getLogger(__name__)
 
