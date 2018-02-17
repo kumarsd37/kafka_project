@@ -1,0 +1,16 @@
+{
+  "tests/clients/kafka/test_kafkaRedisOffsetCommitDAO.py::TestKafkaRedisOffsetCommitDAO::test_commit_offset": true,
+  "tests/clients/kafka/test_kafkaRedisOffsetCommitDAO.py::TestKafkaRedisOffsetCommitDAO::test_get_all_topics_partitions_offset": true,
+  "tests/clients/kafka/test_kafkaRedisOffsetCommitDAO.py::TestKafkaRedisOffsetCommitDAO::test_get_topic_all_partitions_offset": true,
+  "tests/clients/kafka/test_kafkaRedisOffsetCommitDAO.py::TestKafkaRedisOffsetCommitDAO::test_get_topic_partition_offset": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_get": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_get_all_hash_maps": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_get_all_keys_values": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_get_with_namespace": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_hm_set": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_hset": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_set": true,
+  "tests/utils/caching/test_redisPoolConnection.py::TestRedisPoolConnection::test_set_with_namespace": true,
+  "tests/utils/db/test_mySQLPool.py": true,
+  "tests/utils/db/test_mySQLPool.py::TestMySQLPool::test_execute_create_table": true
+}

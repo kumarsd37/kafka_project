@@ -6,6 +6,7 @@ from kafka import KafkaConsumer, ConsumerRebalanceListener, OffsetAndMetadata, T
 from kafka.errors import KafkaError, CommitFailedError
 from six import iteritems
 
+from .meta import TopicPartitionOffset
 
 from framework.abstract_client import AbstractConsumer
 
@@ -15,28 +16,71 @@ logger = logging.getLogger(__name__)
 class Consumer(AbstractConsumer):
 
     def __init__(self, **kwargs):
-        assert kwargs , 'unrecognized configs'
-        assert kwargs.get('client_config'), 'unrecognized client config'
+        """
+        constructor for consumer
+        :keyword Arguments
+        - *
+
+
+        """
+
+        # checking if kwargs are present
+        assert kwargs, 'unrecognized configs'
         self.kwargs = kwargs
 
-        self.consumer_rebalance_listener = None
+        # checking if kafka consumer client_config is present or not.
+        assert kwargs.get('client_config'), 'unrecognized client config'
+        self.client_config = kwargs.get('client_config')
+
+        assert self.client_config.get('group_id'), 'group_id should not be None'
+
+        # initialize the auto commit by getting the enable auto commit value from config
+        # if client config has no auto commit set by default it will be False.
+        self.enable_auto_commit = self.client_config.get('enable_auto_commit') or False
+
+        # check if external
+        self.enable_external_commit = kwargs.get('enable_external_commit')
+
+        if self.enable_external_commit:
+            assert kwargs.get('external_commit_config'), 'external commit config missing'
+            self.external_commit_config = kwargs.get('external_commit_config')
+
+        # we will pass internal commit or external commit to based upon the setting.
+        self._commit = None
+
+        # used at the time of consumer rebalanced
+        self.handle_rebalance_listener = None
+
+        assert kwargs.get('topics'), 'topics should not be none'
         self.topics = kwargs.get('topics')
 
         super().__init__()
 
         try:
-            self.consumer_client = KafkaConsumer(**kwargs.get('client_config'))
-            self.subscribe(topics=self.topics, enable_listener=kwargs.get('enable_listener'))
+            self.consumer_client = KafkaConsumer(**self.client_config)
+            self.subscribe(topics=self.topics, listener=self.getRebalanceListener())
+
+            if self.enable_auto_commit and self.enable_external_commit:
+                raise Exception('cant commit to kafka and external simultaneously')
+            elif self.enable_external_commit:
+
+                try:
+                    self.external_commit_client = self.create_external_commit_dao(self.external_commit_config)
+                    self._commit = self.external_commit
+                except (KeyError, Exception) as exc:
+                    raise exc
+            elif not self.enable_auto_commit:
+                self._commit = self.internal_commit
+
         except KafkaError as exc:
             raise exc
 
-    def subscribe(self, topics, enable_listener=False):
+    def subscribe(self, topics, listener=None):
         logger.info('subscribing to topics {}'.format(topics))
-        if topics is None and len(topics) <= 0:
+        if not topics and len(topics) <= 0:
             raise Exception('topics should not be none')
         try:
-            self.consumer_rebalance_listener = self.getRebalanceListener(enable_listener=enable_listener)
-            self.consumer_client.subscribe(topics, listener=self.consumer_rebalance_listener)
+            self.consumer_client.subscribe(topics, listener=listener)
         except (KafkaError, Exception) as exc:
             raise exc
 
@@ -56,27 +100,6 @@ class Consumer(AbstractConsumer):
         except KafkaError as exc:
             logger.exception('cant seek to specific offset')
             raise exc
-
-    def initial_poll(self, max_retries, timeout_ms=0):
-        """
-        when we subscribe to topics with ConsumerRebalanceListener, the consumer coordinator won't assign
-        the specific partitions to the consumer unless the consumer poll.
-
-        :param max_retries: maximum retries for polling
-        :type max_retries: int
-        :raises KafkaError
-        """
-        poll_success = False
-        while max_retries > 0 and not poll_success:
-            try:
-                logger.info('polling consumer for topics specified')
-                self.consumer_client.poll(timeout_ms=timeout_ms)
-                poll_success = True
-            except (KafkaError, Exception) as exc:
-                logger.warning(exc, exc_info=True)
-                max_retries -= 1
-                if max_retries == 0:
-                    raise KafkaError('Initial poll has failed to start the consumer-{}'.format(self.consumer_config.get('consusmer_id')))
 
     def assign(self, topic_partitions):
         """
@@ -176,19 +199,50 @@ class Consumer(AbstractConsumer):
             raise exc
 
     def post_consume(self, *args, **kwargs):
-        pass
+        if self._commit:
+            message = args[0]
+            topic_partition_offset = TopicPartitionOffset(message.topic, message.partition, message.offset)
+            try:
+                self.commit(topic_partition_offset)
+            except Exception as exc:
+                logger.error(exc.__str__())
 
-    def commit(self, topic_partition_offset=None):
+    @staticmethod
+    def create_external_commit_dao(config):
+        from utils.caching.redis_pool import RedisPoolConnection
+        from .redis_commit import KafkaRedisOffsetCommitDAO
+        try:
+            redis_config = config['redis']['client_config']
+            namespace = config.get('redis').get('namespace')
+            delimiter = config['redis'].get('delimiter') or ':'
+            redis_pooled_connection = RedisPoolConnection(**redis_config)
+            kafka_redis_offset_commit_dao = KafkaRedisOffsetCommitDAO(redis_pooled_connection, namespace=namespace, delimiter=delimiter)
+            return kafka_redis_offset_commit_dao
+        except (KeyError, Exception) as exc:
+            logger.error(exc.__str__())
+            raise exc
+
+    def external_commit(self, topic_partition_offset=None):
+        try:
+            response = self.external_commit_client.commit_offset(topic_partition_offset)
+            if not response:
+                raise Exception('kafka external commit failed for topic:{}, partition:{} and offset:{}'.format(topic_partition_offset.topic, topic_partition_offset.partition, topic_partition_offset.offset))
+        except (ConnectionError, TimeoutError, Exception) as exc:
+            logger.exception(str(exc))
+            raise exc
+
+    def internal_commit(self, topic_partition_offset):
         """
-        commit the last read offsets
+                commit the last read offsets
 
-        :param topic_partition_offset: list of topic, partition, tuple
-        :type topic_partition_offset: list
-        :raises CommitFailedError
+                :param topic_partition_offset: list of topic, partition, tuple
+                :type topic_partition_offset: list
+                :raises CommitFailedError
         """
         if topic_partition_offset is not None:
             offsets = {
-                TopicPartition(topic_partition_offset[0], topic_partition_offset[1]): OffsetAndMetadata(topic_partition_offset[2]+1, None)
+                TopicPartition(topic_partition_offset.topic, topic_partition_offset.partition): OffsetAndMetadata(
+                    topic_partition_offset.offset + 1, None)
             }
         else:
             offsets = None
@@ -196,6 +250,9 @@ class Consumer(AbstractConsumer):
             self.consumer_client.commit(offsets=offsets)
         except CommitFailedError as exc:
             raise exc
+
+    def commit(self, topic_partition_offset=None):
+        self._commit(topic_partition_offset)
 
     def commit_async(self, offsets=None, callback=None):
         """
@@ -232,34 +289,32 @@ class Consumer(AbstractConsumer):
         except KafkaError as exc:
             raise exc
 
-    class HandleRebalanceListener(ConsumerRebalanceListener):
-        """
-        class to handle partition assignments at the time of rebalanced.
-        """
+    def on_partitions_assigned(self, assigned):
+        if self.enable_external_commit:
+            for tp in assigned:
+                topic = tp.topic
+                partition = tp.partition
+                tpo = self.external_commit_client.get_topic_partition_offset(TopicPartitionOffset(topic, partition, None))
+                logger.info('last committed offset for topic:{} , partition:{} is {}'.format(topic, partition, tpo.offset))
+                if tpo.offset:
+                    self.consumer_client.seek(tp, tpo.offset)
+                    
+    def on_partitions_revoked(self, revoked):
+        pass
 
-        def __init__(self, consumer_client):
-            self.consumer_client = consumer_client
+    def getRebalanceListener(self):
+        """ return the object of ConsumerRebalanceListener  """
 
-        def on_partitions_revoked(self, revoked):
-            pass
-
-        def on_partitions_assigned(self, assigned):
-            pass
-
-    def getRebalanceListener(self, enable_listener):
-        """
-        returns ConsumerRebalanceListener.
-
-        :param enable_listener: if enabled ConsumerRebalanceListener will be used.
-        :type enable_listener: bool
-        :return: (ConsumerRebalanceListener or None)
-        :rtype: Multiple
-        """
-        if enable_listener:
-            return Consumer.HandleRebalanceListener(self.consumer_client)
-        else:
-            return None
-
+        HandleRebalanceListener = type('HandleRebalanceListener', (ConsumerRebalanceListener,),
+            {
+                'on_partitions_assigned': self.on_partitions_assigned,
+                'on_partitions_revoked': self.on_partitions_revoked
+             }
+        )
+        
+        self.handle_rebalance_listener = HandleRebalanceListener()
+        return self.handle_rebalance_listener
+        
     def deserialize_message(self, message, *args, **kwargs):
         pass
 

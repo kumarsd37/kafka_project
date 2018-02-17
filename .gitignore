@@ -12,3 +12,10 @@ framework/abstract_client/__pycache__/
 framework/clients/__pycache__/
 framework/clients/file/__pycache__/
 framework/clients/kafka/__pycache__/
+.tox/
+.tox/py35/lib/python3.5/__pycache__
+.tox/py35/tmp/
+build/
+build/bdist.linux-x86_64/
+dist/
+.pytest_cache/

@@ -1,0 +1,14 @@
+actionid: py35
+msg: installpkg
+cmdargs: ['/home/pavan/code/kafka_project/.tox/py35/bin/pip', 'install', '/home/pavan/code/kafka_project/.tox/dist/kafka_project-1.0.zip']
+
+Processing ./.tox/dist/kafka_project-1.0.zip
+    Complete output from command python setup.py egg_info:
+    Traceback (most recent call last):
+      File "<string>", line 1, in <module>
+      File "/tmp/pip-svjap77e-build/setup.py", line 3, in <module>
+        with open('requirements.txt', 'r') as fh:
+    FileNotFoundError: [Errno 2] No such file or directory: 'requirements.txt'
+    
+    ----------------------------------------
+Command "python setup.py egg_info" failed with error code 1 in /tmp/pip-svjap77e-build/

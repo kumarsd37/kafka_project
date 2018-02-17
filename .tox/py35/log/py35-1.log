@@ -1,0 +1,33 @@
+actionid: py35
+msg: getenv
+cmdargs: ['/home/pavan/code/kafka_project/.tox/py35/bin/pip', 'install', '-r/home/pavan/code/kafka_project/requirements.txt']
+
+Collecting attrs==17.4.0 (from -r /home/pavan/code/kafka_project/requirements.txt (line 1))
+  Using cached attrs-17.4.0-py2.py3-none-any.whl
+Collecting certifi==2017.11.5 (from -r /home/pavan/code/kafka_project/requirements.txt (line 2))
+  Using cached certifi-2017.11.5-py2.py3-none-any.whl
+Collecting chardet==3.0.4 (from -r /home/pavan/code/kafka_project/requirements.txt (line 3))
+  Using cached chardet-3.0.4-py2.py3-none-any.whl
+Collecting Cython==0.25.2 (from -r /home/pavan/code/kafka_project/requirements.txt (line 4))
+  Using cached Cython-0.25.2-cp35-cp35m-manylinux1_x86_64.whl
+Collecting fastavro==0.17.1 (from -r /home/pavan/code/kafka_project/requirements.txt (line 5))
+Collecting idna==2.6 (from -r /home/pavan/code/kafka_project/requirements.txt (line 6))
+  Using cached idna-2.6-py2.py3-none-any.whl
+Collecting kafka-python==1.4.1 (from -r /home/pavan/code/kafka_project/requirements.txt (line 7))
+  Using cached kafka_python-1.4.1-py2.py3-none-any.whl
+Collecting pluggy==0.6.0 (from -r /home/pavan/code/kafka_project/requirements.txt (line 8))
+Collecting py==1.5.2 (from -r /home/pavan/code/kafka_project/requirements.txt (line 9))
+  Using cached py-1.5.2-py2.py3-none-any.whl
+Collecting pytest==3.4.0 (from -r /home/pavan/code/kafka_project/requirements.txt (line 10))
+  Using cached pytest-3.4.0-py2.py3-none-any.whl
+Collecting redis==2.10.6 (from -r /home/pavan/code/kafka_project/requirements.txt (line 11))
+  Using cached redis-2.10.6-py2.py3-none-any.whl
+Collecting requests==2.18.4 (from -r /home/pavan/code/kafka_project/requirements.txt (line 12))
+  Using cached requests-2.18.4-py2.py3-none-any.whl
+Collecting six==1.11.0 (from -r /home/pavan/code/kafka_project/requirements.txt (line 13))
+  Using cached six-1.11.0-py2.py3-none-any.whl
+Collecting urllib3==1.22 (from -r /home/pavan/code/kafka_project/requirements.txt (line 14))
+  Using cached urllib3-1.22-py2.py3-none-any.whl
+Requirement already satisfied: setuptools>=18.0 in ./.tox/py35/lib/python3.5/site-packages (from fastavro==0.17.1->-r /home/pavan/code/kafka_project/requirements.txt (line 5))
+Installing collected packages: attrs, certifi, chardet, Cython, fastavro, idna, kafka-python, pluggy, py, six, pytest, redis, urllib3, requests
+Successfully installed Cython-0.25.2 attrs-17.4.0 certifi-2017.11.5 chardet-3.0.4 fastavro-0.17.1 idna-2.6 kafka-python-1.4.1 pluggy-0.6.0 py-1.5.2 pytest-3.4.0 redis-2.10.6 requests-2.18.4 six-1.11.0 urllib3-1.22

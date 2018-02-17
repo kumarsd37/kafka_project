@@ -1,0 +1,142 @@
+actionid: tox
+msg: packaging
+cmdargs: ['/home/pavan/virtualenvs/kafka_project_env/bin/python3', local('/home/pavan/code/kafka_project/setup.py'), 'sdist', '--formats=zip', '--dist-dir', local('/home/pavan/code/kafka_project/.tox/dist')]
+
+running sdist
+running egg_info
+writing top-level names to kafka_project.egg-info/top_level.txt
+writing kafka_project.egg-info/PKG-INFO
+writing requirements to kafka_project.egg-info/requires.txt
+writing dependency_links to kafka_project.egg-info/dependency_links.txt
+reading manifest file 'kafka_project.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+writing manifest file 'kafka_project.egg-info/SOURCES.txt'
+running check
+creating kafka_project-1.0
+creating kafka_project-1.0/framework
+creating kafka_project-1.0/framework/abstract_client
+creating kafka_project-1.0/framework/clients
+creating kafka_project-1.0/framework/clients/file
+creating kafka_project-1.0/framework/clients/http
+creating kafka_project-1.0/framework/clients/influxdb
+creating kafka_project-1.0/framework/clients/kafka
+creating kafka_project-1.0/framework/clients/splunk
+creating kafka_project-1.0/framework/utils
+creating kafka_project-1.0/framework/utils/caching
+creating kafka_project-1.0/framework/utils/db
+creating kafka_project-1.0/framework/utils/serde
+creating kafka_project-1.0/kafka_project.egg-info
+creating kafka_project-1.0/tests
+creating kafka_project-1.0/tests/clients
+creating kafka_project-1.0/tests/clients/kafka
+creating kafka_project-1.0/tests/utils
+creating kafka_project-1.0/tests/utils/caching
+creating kafka_project-1.0/tests/utils/db
+copying files to kafka_project-1.0...
+copying MANIFEST.in -> kafka_project-1.0
+copying README.md -> kafka_project-1.0
+copying requirements.txt -> kafka_project-1.0
+copying setup.py -> kafka_project-1.0
+copying framework/AppMain.py -> kafka_project-1.0/framework
+copying framework/__init__.py -> kafka_project-1.0/framework
+copying framework/clients_initializations.py -> kafka_project-1.0/framework
+copying framework/container.py -> kafka_project-1.0/framework
+copying framework/exceptions.py -> kafka_project-1.0/framework
+copying framework/worker.py -> kafka_project-1.0/framework
+copying framework/abstract_client/__init__.py -> kafka_project-1.0/framework/abstract_client
+copying framework/abstract_client/consumer.py -> kafka_project-1.0/framework/abstract_client
+copying framework/abstract_client/producer.py -> kafka_project-1.0/framework/abstract_client
+copying framework/clients/__init__.py -> kafka_project-1.0/framework/clients
+copying framework/clients/file/__init__.py -> kafka_project-1.0/framework/clients/file
+copying framework/clients/file/file_writer.py -> kafka_project-1.0/framework/clients/file
+copying framework/clients/http/__init__.py -> kafka_project-1.0/framework/clients/http
+copying framework/clients/influxdb/__init__.py -> kafka_project-1.0/framework/clients/influxdb
+copying framework/clients/kafka/__init__.py -> kafka_project-1.0/framework/clients/kafka
+copying framework/clients/kafka/dao.py -> kafka_project-1.0/framework/clients/kafka
+copying framework/clients/kafka/kafka_consumer.py -> kafka_project-1.0/framework/clients/kafka
+copying framework/clients/kafka/kafka_producer.py -> kafka_project-1.0/framework/clients/kafka
+copying framework/clients/kafka/meta.py -> kafka_project-1.0/framework/clients/kafka
+copying framework/clients/kafka/redis_commit.py -> kafka_project-1.0/framework/clients/kafka
+copying framework/clients/splunk/__init__.py -> kafka_project-1.0/framework/clients/splunk
+copying framework/utils/__init__.py -> kafka_project-1.0/framework/utils
+copying framework/utils/date_utils.py -> kafka_project-1.0/framework/utils
+copying framework/utils/http_utils.py -> kafka_project-1.0/framework/utils
+copying framework/utils/log.py -> kafka_project-1.0/framework/utils
+copying framework/utils/splunk.py -> kafka_project-1.0/framework/utils
+copying framework/utils/zkeeper.py -> kafka_project-1.0/framework/utils
+copying framework/utils/caching/__init__.py -> kafka_project-1.0/framework/utils/caching
+copying framework/utils/caching/redis_pool.py -> kafka_project-1.0/framework/utils/caching
+copying framework/utils/db/__init__.py -> kafka_project-1.0/framework/utils/db
+copying framework/utils/db/db_pool.py -> kafka_project-1.0/framework/utils/db
+copying framework/utils/serde/__init__.py -> kafka_project-1.0/framework/utils/serde
+copying framework/utils/serde/avro.py -> kafka_project-1.0/framework/utils/serde
+copying kafka_project.egg-info/PKG-INFO -> kafka_project-1.0/kafka_project.egg-info
+copying kafka_project.egg-info/SOURCES.txt -> kafka_project-1.0/kafka_project.egg-info
+copying kafka_project.egg-info/dependency_links.txt -> kafka_project-1.0/kafka_project.egg-info
+copying kafka_project.egg-info/not-zip-safe -> kafka_project-1.0/kafka_project.egg-info
+copying kafka_project.egg-info/requires.txt -> kafka_project-1.0/kafka_project.egg-info
+copying kafka_project.egg-info/top_level.txt -> kafka_project-1.0/kafka_project.egg-info
+copying tests/__init__.py -> kafka_project-1.0/tests
+copying tests/clients/__init__.py -> kafka_project-1.0/tests/clients
+copying tests/clients/kafka/__init__.py -> kafka_project-1.0/tests/clients/kafka
+copying tests/clients/kafka/test_kafkaRedisOffsetCommitDAO.py -> kafka_project-1.0/tests/clients/kafka
+copying tests/utils/__init__.py -> kafka_project-1.0/tests/utils
+copying tests/utils/caching/__init__.py -> kafka_project-1.0/tests/utils/caching
+copying tests/utils/caching/test_redisPoolConnection.py -> kafka_project-1.0/tests/utils/caching
+copying tests/utils/db/__init__.py -> kafka_project-1.0/tests/utils/db
+Writing kafka_project-1.0/setup.cfg
+creating '.tox/dist/kafka_project-1.0.zip' and adding 'kafka_project-1.0' to it
+adding 'kafka_project-1.0/MANIFEST.in'
+adding 'kafka_project-1.0/requirements.txt'
+adding 'kafka_project-1.0/setup.py'
+adding 'kafka_project-1.0/README.md'
+adding 'kafka_project-1.0/PKG-INFO'
+adding 'kafka_project-1.0/setup.cfg'
+adding 'kafka_project-1.0/framework/exceptions.py'
+adding 'kafka_project-1.0/framework/__init__.py'
+adding 'kafka_project-1.0/framework/clients_initializations.py'
+adding 'kafka_project-1.0/framework/worker.py'
+adding 'kafka_project-1.0/framework/AppMain.py'
+adding 'kafka_project-1.0/framework/container.py'
+adding 'kafka_project-1.0/framework/utils/zkeeper.py'
+adding 'kafka_project-1.0/framework/utils/http_utils.py'
+adding 'kafka_project-1.0/framework/utils/log.py'
+adding 'kafka_project-1.0/framework/utils/__init__.py'
+adding 'kafka_project-1.0/framework/utils/date_utils.py'
+adding 'kafka_project-1.0/framework/utils/splunk.py'
+adding 'kafka_project-1.0/framework/utils/caching/__init__.py'
+adding 'kafka_project-1.0/framework/utils/caching/redis_pool.py'
+adding 'kafka_project-1.0/framework/utils/serde/avro.py'
+adding 'kafka_project-1.0/framework/utils/serde/__init__.py'
+adding 'kafka_project-1.0/framework/utils/db/__init__.py'
+adding 'kafka_project-1.0/framework/utils/db/db_pool.py'
+adding 'kafka_project-1.0/framework/abstract_client/consumer.py'
+adding 'kafka_project-1.0/framework/abstract_client/__init__.py'
+adding 'kafka_project-1.0/framework/abstract_client/producer.py'
+adding 'kafka_project-1.0/framework/clients/__init__.py'
+adding 'kafka_project-1.0/framework/clients/influxdb/__init__.py'
+adding 'kafka_project-1.0/framework/clients/splunk/__init__.py'
+adding 'kafka_project-1.0/framework/clients/kafka/__init__.py'
+adding 'kafka_project-1.0/framework/clients/kafka/meta.py'
+adding 'kafka_project-1.0/framework/clients/kafka/dao.py'
+adding 'kafka_project-1.0/framework/clients/kafka/kafka_consumer.py'
+adding 'kafka_project-1.0/framework/clients/kafka/kafka_producer.py'
+adding 'kafka_project-1.0/framework/clients/kafka/redis_commit.py'
+adding 'kafka_project-1.0/framework/clients/file/__init__.py'
+adding 'kafka_project-1.0/framework/clients/file/file_writer.py'
+adding 'kafka_project-1.0/framework/clients/http/__init__.py'
+adding 'kafka_project-1.0/kafka_project.egg-info/not-zip-safe'
+adding 'kafka_project-1.0/kafka_project.egg-info/dependency_links.txt'
+adding 'kafka_project-1.0/kafka_project.egg-info/requires.txt'
+adding 'kafka_project-1.0/kafka_project.egg-info/SOURCES.txt'
+adding 'kafka_project-1.0/kafka_project.egg-info/top_level.txt'
+adding 'kafka_project-1.0/kafka_project.egg-info/PKG-INFO'
+adding 'kafka_project-1.0/tests/__init__.py'
+adding 'kafka_project-1.0/tests/utils/__init__.py'
+adding 'kafka_project-1.0/tests/utils/caching/test_redisPoolConnection.py'
+adding 'kafka_project-1.0/tests/utils/caching/__init__.py'
+adding 'kafka_project-1.0/tests/utils/db/__init__.py'
+adding 'kafka_project-1.0/tests/clients/__init__.py'
+adding 'kafka_project-1.0/tests/clients/kafka/__init__.py'
+adding 'kafka_project-1.0/tests/clients/kafka/test_kafkaRedisOffsetCommitDAO.py'
+removing 'kafka_project-1.0' (and everything under it)

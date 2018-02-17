@@ -1,0 +1,19 @@
+actionid: py35
+msg: envreport
+cmdargs: ['/home/pavan/code/kafka_project/.tox/py35/bin/pip', 'freeze']
+
+attrs==17.4.0
+certifi==2017.11.5
+chardet==3.0.4
+Cython==0.25.2
+fastavro==0.17.1
+idna==2.6
+kafka-project==1.0
+kafka-python==1.4.1
+pluggy==0.6.0
+py==1.5.2
+pytest==3.4.0
+redis==2.10.6
+requests==2.18.4
+six==1.11.0
+urllib3==1.22
