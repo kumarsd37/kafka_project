@@ -18,3 +18,4 @@ framework/clients/kafka/__pycache__/
 /build/
 /dist/
 /build_docs/
+/kafka_project.egg-info/
