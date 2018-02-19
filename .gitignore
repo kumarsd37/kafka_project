@@ -19,3 +19,5 @@ framework/clients/kafka/__pycache__/
 /dist/
 /build_docs/
 /kafka_project.egg-info/
+.tox/
+
