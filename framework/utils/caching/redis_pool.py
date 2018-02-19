@@ -1,7 +1,7 @@
 from itertools import zip_longest
 
 from redis import ConnectionPool, Redis
-from redis.exceptions import (ConnectionError, TimeoutError, WatchError)
+from redis.exceptions import ConnectionError, TimeoutError, WatchError
 
 
 class RedisPoolConnection:
@@ -23,9 +23,8 @@ class RedisPoolConnection:
         * *host* (``str``) -- hostname for redis
         * *port* (``str``) -- port for redis
         * *password* (``str``) -- password , Default None
-        * *db_number* (``int``) -- db number from 0-15.
-        * *max_connections* (``int``) -- maximum number of connections for pooling.
-
+        * *db_number* (``int``) -- db number from 0-15
+        * *max_connections* (``int``) -- maximum number of connections for pooling
         """
         self._host = kwargs.get('host')
         self._port = kwargs.get('port')
@@ -44,20 +43,21 @@ class RedisPoolConnection:
 
     def set(self, key=None, value=None, namespace=None, delimiter=':'):
         """
-        set the value for the given key
+        set the value for given key
 
         :param key: key to set
         :type key: str
         :param value: value to set for a given key
         :type value: Any
-        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys from all keys.
+        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys from all keys
         :type namespace: str
         :param delimiter: used in between joining namespace and key
         :type delimiter: str
-        :return: return True if success else False
+        :return: return True if success, else False
         :rtype: bool
-        :raises ConnectionError, TimeoutError, Exception
+        :raises: ConnectionError, TimeoutError, Exception
         """
+
         delimiter = delimiter or ':'
         try:
             key = self.get_key_with_or_without_namespace(key=key, namespace=namespace, delimiter=delimiter)
@@ -69,6 +69,7 @@ class RedisPoolConnection:
     def get(self, key=None, namespace=None, delimiter=':'):
         """
         returns the value based on key
+
         :param key: key to search
         :type key: str
         :param namespace: common prefix for set of keys, which uniquely identifies the set of keys from all keys.
@@ -77,7 +78,7 @@ class RedisPoolConnection:
         :type delimiter: str
         :return: value of the key
         :rtype: Any
-        :raises ConnectionError, TimeoutError, Exception
+        :raises: ConnectionError, TimeoutError, Exception
         """
         delimiter = delimiter or ':'
         try:
@@ -89,11 +90,13 @@ class RedisPoolConnection:
 
     def get_all_keys_values(self, regex='*'):
         """
-        returns all the keys. if we specify the namespace it will get from that namespace.
+        returns all the keys. if we specify the namespace it will get from that namespace
+
         :param regex: regex for identifying the keys
         :type regex: Union(str, optional)
         :return: dictionary of all keys with values
         :rtype: dict
+        :raises: ConnectionError, TimeoutError, Exception
         """
         try:
             keys = self._connection.keys(regex)
@@ -106,12 +109,12 @@ class RedisPoolConnection:
     def get_all_hash_maps(self, regex='*'):
         """
         return all hash_maps available in the redis.
-        .. warning:: It is used only when you know the specific type of keys are hash based keys which are matching regex.
 
-        :param regex - regular expression to check the keys
-        :type str
-        :returns list of tuples consists of name and dict object
-        :rtype list(tuple(str, dict))
+        .. warning:: It is used only when you know the specific type of keys are hash based keys which are matching regex
+
+        :param regex: regular expression to check the keys(default: '*')
+        :type regex: str
+        :raises: ConnectionError, TimeoutError, WatchError, Exception
         """
         try:
             keys = self._connection.keys(regex)
@@ -127,17 +130,18 @@ class RedisPoolConnection:
     def hm_set(self, name=None, hash_map=None, namespace=None, delimiter=':'):
         """
         store the python dict object in Redis hash_map format in redis.
+
         :param name: name of the hash_map
         :type name: str
         :param hash_map: dict object to store
         :type hash_map: dict
-        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all keys.
+        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all the keys.
         :type namespace: str
         :param delimiter: used in between joining namespace and hash_map name
         :type delimiter: str
-        :return: boolean
+        :return: return True if success, else False
         :rtype: bool
-        :raises Exception
+        :raises: ConnectionError, TimeoutError, Exception
         """
         delimiter = delimiter or ':'
         key = self.get_key_with_or_without_namespace(key=name, namespace=namespace, delimiter=delimiter)
@@ -155,16 +159,18 @@ class RedisPoolConnection:
     def h_get(self, name=None, specific_key=None, namespace=None, delimiter=':'):
         """
         get the value of the particular key of hash_map or dict
+
         :param name: name of the hash_map
         :type name: str
         :param specific_key: specific key to check in hash_map
         :type specific_key: str
-        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all keys.
+        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all the keys.
         :type namespace: str
         :param delimiter: used in between joining namespace and hash_map name
         :type delimiter: str
         :return: value of the key
         :rtype: Any
+        :raises: ConnectionError, TimeoutError, Exception
         """
         delimiter = delimiter or ':'
         key = self.get_key_with_or_without_namespace(key=name, namespace=namespace, delimiter=delimiter)
@@ -177,14 +183,16 @@ class RedisPoolConnection:
     def hm_get(self, name=None, namespace=None, delimiter=None):
         """
         get the dict object stored as hash_map in redis by hash_map name
+
         :param name: name of the hash_map
         :type name: str
-        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all keys.
+        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all the keys.
         :type namespace: str
         :param delimiter: used in between joining namespace and hash_map name
         :type delimiter: str
         :return: dict object which is stored as hash_map in redis
         :rtype: dict
+        :raises: ConnectionError, TimeoutError, Exception
         """
         delimiter = delimiter or ':'
         key = self.get_key_with_or_without_namespace(key=name, namespace=namespace, delimiter=delimiter)
@@ -198,14 +206,15 @@ class RedisPoolConnection:
     def get_key_with_or_without_namespace(key=None, namespace=None, delimiter=':'):
         """
         Get the key with namespace has prefix. if no namespace is provided it will return the key
+
         :param key: name of the key
         :type key: str
-        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all keys.
+        :param namespace: common prefix for set of keys, which uniquely identifies the set of keys among all the keys.
         :type namespace: str
         :param delimiter: used in between joining namespace and hash_map name
         :type delimiter: str
         :return: key with or without namespace
-        :rtype:
+        :rtype: str
         """
         delimiter = delimiter or ':'
         key_with_or_without_namespace = [x for x in [namespace, key] if x]
