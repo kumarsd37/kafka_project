@@ -7,7 +7,7 @@
             "topics": ["ARTICLE"],
             "max_retries": 3,
             "max_records": 1,
-            "poll_timeout": 100,
+            "poll_timeout": 500,
             "close_timeout": 5,
             "enable_external_commit": true,
             "external_commit_config":{
