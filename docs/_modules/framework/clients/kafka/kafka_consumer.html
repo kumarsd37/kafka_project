@@ -1,0 +1,485 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>framework.clients.kafka.kafka_consumer &#8212; kafka_project 1.0.0-dev documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for framework.clients.kafka.kafka_consumer</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;pavan.tummalapalli&#39;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">kafka</span> <span class="k">import</span> <span class="n">KafkaConsumer</span><span class="p">,</span> <span class="n">ConsumerRebalanceListener</span><span class="p">,</span> <span class="n">OffsetAndMetadata</span><span class="p">,</span> <span class="n">TopicPartition</span>
+<span class="kn">from</span> <span class="nn">kafka.errors</span> <span class="k">import</span> <span class="n">KafkaError</span><span class="p">,</span> <span class="n">CommitFailedError</span>
+<span class="kn">from</span> <span class="nn">six</span> <span class="k">import</span> <span class="n">iteritems</span>
+
+<span class="kn">from</span> <span class="nn">.meta</span> <span class="k">import</span> <span class="n">TopicPartitionOffset</span>
+
+<span class="kn">from</span> <span class="nn">framework.abstract_client</span> <span class="k">import</span> <span class="n">AbstractConsumer</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Consumer"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer">[docs]</a><span class="k">class</span> <span class="nc">Consumer</span><span class="p">(</span><span class="n">AbstractConsumer</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        constructor for kafka consumer</span>
+
+<span class="sd">        :keyword Arguments</span>
+
+<span class="sd">        - name (`str`) - name of the inbound client to create</span>
+<span class="sd">        - config (`dict`) - config of kafka consumer client</span>
+<span class="sd">            - topics (`list`) - list of topics to be subscribed by the each consumer</span>
+<span class="sd">            - enable_external_commit (`bool`) - If True, offsets are stored at external client</span>
+<span class="sd">            - external_commit_config (`dict`) - config for external commit client</span>
+<span class="sd">                - redis (`dict`) -  config for storing external commit</span>
+<span class="sd">                    - namespace (`str`) - common prefix for set of keys, which uniquely identifies the set of keys among all the keys.</span>
+<span class="sd">                    - delimiter (`str`) - used in between joining namespace and key</span>
+<span class="sd">                    - client_config (`dict`) - redis client config</span>
+<span class="sd">                        - host (`str`) - redis host</span>
+<span class="sd">                        - port (`str`) - redis port</span>
+<span class="sd">                        - password (`str`) - redis password. default null</span>
+<span class="sd">                        - db_number (`int`) - By default redis open 16 db&#39;s while creating connection. we can specify specific db number to open it at the time of creating the connection.</span>
+<span class="sd">                        - max_connections (`int`) - maximum number of connections to be opened in pooling.</span>
+
+<span class="sd">            - client-config: (`dict`) - kafka python consumer client settings</span>
+
+<span class="sd">        .. Note:: kafka consumer client Configuration parameters are described in more detail at http://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer.html#</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># checking if kwargs are present</span>
+        <span class="k">assert</span> <span class="n">kwargs</span><span class="p">,</span> <span class="s1">&#39;unrecognized configs&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+        <span class="c1"># checking if kafka consumer client_config is present or not.</span>
+        <span class="k">assert</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;client_config&#39;</span><span class="p">),</span> <span class="s1">&#39;unrecognized client config&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;client_config&#39;</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;group_id&#39;</span><span class="p">),</span> <span class="s1">&#39;group_id should not be None&#39;</span>
+
+        <span class="c1"># initialize the auto commit by getting the enable auto commit value from config</span>
+        <span class="c1"># if client config has no auto commit set by default it will be False.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_auto_commit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;enable_auto_commit&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">False</span>
+
+        <span class="c1"># check if external</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enable_external_commit</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;enable_external_commit&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_external_commit</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;external_commit_config&#39;</span><span class="p">),</span> <span class="s1">&#39;external commit config missing&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">external_commit_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;external_commit_config&#39;</span><span class="p">)</span>
+
+        <span class="c1"># we will pass internal commit or external commit to based upon the setting.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_commit</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># used at the time of consumer rebalanced</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_rebalance_listener</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">assert</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topics&#39;</span><span class="p">),</span> <span class="s1">&#39;topics should not be none&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topics</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topics&#39;</span><span class="p">)</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span> <span class="o">=</span> <span class="n">KafkaConsumer</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">client_config</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">topics</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topics</span><span class="p">,</span> <span class="n">listener</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_rebalance_listener</span><span class="p">())</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_auto_commit</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_external_commit</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;cant commit to kafka and external simultaneously&#39;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_external_commit</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">external_commit_client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_external_commit_dao</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">external_commit_config</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_commit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_commit</span>
+                <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exc</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_auto_commit</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_commit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">internal_commit</span>
+
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.subscribe"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.subscribe">[docs]</a>    <span class="k">def</span> <span class="nf">subscribe</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topics</span><span class="p">,</span> <span class="n">listener</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        subscribe to list of topics to be specified. if consumer group_id is specified, listener will be</span>
+<span class="sd">        invoked at the time of each rebalance operation</span>
+
+<span class="sd">        :param topics: list of topics</span>
+<span class="sd">        :type topics: list</span>
+<span class="sd">        :param listener: object of kafka-python ConsumerRebalanceListener (optional, default: None)</span>
+<span class="sd">        :type listener: ConsumerRebalanceListener</span>
+<span class="sd">        :raises: KafkaError: if not able to subscribe to topics</span>
+<span class="sd">        :raises Exception: unhandled exception</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;subscribing to topics </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topics</span><span class="p">))</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">topics</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">topics</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;topics should not be none&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">subscribe</span><span class="p">(</span><span class="n">topics</span><span class="p">,</span> <span class="n">listener</span><span class="o">=</span><span class="n">listener</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">KafkaError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.seek"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.seek">[docs]</a>    <span class="k">def</span> <span class="nf">seek</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_partition</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        seek to specific partition</span>
+
+<span class="sd">        :param topic_partition: topic_partition object consists of topic and offset</span>
+<span class="sd">        :type topic_partition: TopicPartition</span>
+<span class="sd">        :param offset: offset to seek</span>
+<span class="sd">        :type offset: int</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">topic_partition</span><span class="p">,</span> <span class="n">offset</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;cant seek to specific offset&#39;</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.assign"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.assign">[docs]</a>    <span class="k">def</span> <span class="nf">assign</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_partitions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Manually assign a list of TopicPartitions to this consumer</span>
+
+<span class="sd">        :param topic_partitions: list of topic partition tuple</span>
+<span class="sd">        :type topic_partitions: list(TopicPartition)</span>
+<span class="sd">        :raises KafkaError: if unable to assign the partition</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">topic_partitions_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">topic</span><span class="p">,</span> <span class="n">partition</span> <span class="ow">in</span> <span class="n">topic_partitions</span><span class="p">:</span>
+            <span class="n">tp</span> <span class="o">=</span> <span class="n">TopicPartition</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">partition</span><span class="p">)</span>
+            <span class="n">topic_partitions_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tp</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">topic_partitions_list</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.assignment"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.assignment">[docs]</a>    <span class="k">def</span> <span class="nf">assignment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the TopicPartitions currently assigned to this consumer</span>
+
+<span class="sd">        If partitions were directly assigned using</span>
+<span class="sd">        :meth:`~Consumer.assign`, then this will simply return the</span>
+<span class="sd">        same partitions that were previously assigned.  If topics were</span>
+<span class="sd">        subscribed using :meth:`~Consumer.subscribe`, then this will</span>
+<span class="sd">        give the set of topic partitions currently assigned to the consumer</span>
+<span class="sd">        (which may be None if the assignment hasn&#39;t happened yet, or if the</span>
+<span class="sd">        partitions are in the process of being reassigned)</span>
+
+<span class="sd">        :return: {TopicPartition, ...}</span>
+<span class="sd">        :rtype: set</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">assignment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">assignment</span><span class="p">()</span>
+            <span class="k">return</span> <span class="n">assignment</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.beginning_offsets"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.beginning_offsets">[docs]</a>    <span class="k">def</span> <span class="nf">beginning_offsets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_partitions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the first offset for the given partitions</span>
+<span class="sd">        This method does not change the current consumer position of the partitions</span>
+
+<span class="sd">        :param topic_partitions: list of topic_partitions</span>
+<span class="sd">        :type topic_partitions: list(TopicPartition)</span>
+<span class="sd">        :return: The earliest available offsets for the given partitions</span>
+<span class="sd">        :rtype: list({TopicPartition: int})</span>
+<span class="sd">        :raises KafkaError: if not able to find the beginning offsets</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">beginning_offsets</span><span class="p">(</span><span class="n">topic_partitions</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">res</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.seek_to_beginning"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.seek_to_beginning">[docs]</a>    <span class="k">def</span> <span class="nf">seek_to_beginning</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_partitions</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        seek to beginning of the partitions</span>
+
+<span class="sd">        :param topic_partitions: list of topic partition objects</span>
+<span class="sd">        :type topic_partitions: list(TopicPartition)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">seek_to_beginning</span><span class="p">(</span><span class="n">topic_partitions</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">res</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.pre_consume"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.pre_consume">[docs]</a>    <span class="k">def</span> <span class="nf">pre_consume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; operation need to be performed before pre consume &quot;&quot;&quot;</span></div>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Consumer.consume"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.consume">[docs]</a>    <span class="k">def</span> <span class="nf">consume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        consumes the batch of messages from polling</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">5</span>
+        <span class="n">max_records</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max_records&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max_records&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">5</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">records</span> <span class="o">=</span> <span class="n">iteritems</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">poll</span><span class="p">(</span><span class="n">timeout_ms</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">max_records</span><span class="o">=</span><span class="n">max_records</span><span class="p">))</span>
+            <span class="n">messages</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">records</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">record</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+                    <span class="c1"># message returns tuple of (TopicPartition, list(ConsumerRecord)</span>
+                    <span class="k">for</span> <span class="n">consumerRecord</span> <span class="ow">in</span> <span class="n">record</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">consumerRecord</span><span class="p">)</span>
+                        <span class="n">messages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">consumerRecord</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">messages</span>
+
+        <span class="k">except</span> <span class="p">(</span><span class="n">KafkaError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.post_consume"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.post_consume">[docs]</a>    <span class="k">def</span> <span class="nf">post_consume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        operation need to performed after consuming the message</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_commit</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">topic_partition_offset</span> <span class="o">=</span> <span class="n">TopicPartitionOffset</span><span class="p">(</span><span class="n">message</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">partition</span><span class="p">,</span> <span class="n">message</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">topic_partition_offset</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+                <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__str__</span><span class="p">(),</span> <span class="n">exc_info</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Consumer.create_external_commit_dao"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.create_external_commit_dao">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">create_external_commit_dao</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        create external commit client object</span>
+
+<span class="sd">        :param config: config of redis</span>
+<span class="sd">        :type config: dict</span>
+<span class="sd">        :return: external commit client object</span>
+<span class="sd">        :rtype: KafkaRedisOffsetCommitDAO</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="kn">from</span> <span class="nn">utils.caching.redis_pool</span> <span class="k">import</span> <span class="n">RedisPoolConnection</span>
+        <span class="kn">from</span> <span class="nn">.redis_commit</span> <span class="k">import</span> <span class="n">KafkaRedisOffsetCommitDAO</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">redis_config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;redis&#39;</span><span class="p">][</span><span class="s1">&#39;client_config&#39;</span><span class="p">]</span>
+            <span class="n">namespace</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;redis&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;namespace&#39;</span><span class="p">)</span>
+            <span class="n">delimiter</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s1">&#39;redis&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;delimiter&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;:&#39;</span>
+            <span class="n">redis_pooled_connection</span> <span class="o">=</span> <span class="n">RedisPoolConnection</span><span class="p">(</span><span class="o">**</span><span class="n">redis_config</span><span class="p">)</span>
+            <span class="n">kafka_redis_offset_commit_dao</span> <span class="o">=</span> <span class="n">KafkaRedisOffsetCommitDAO</span><span class="p">(</span><span class="n">redis_pooled_connection</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">namespace</span><span class="p">,</span> <span class="n">delimiter</span><span class="o">=</span><span class="n">delimiter</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">kafka_redis_offset_commit_dao</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="fm">__str__</span><span class="p">())</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.external_commit"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.external_commit">[docs]</a>    <span class="k">def</span> <span class="nf">external_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_partition_offset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        commit the offset to external client</span>
+
+<span class="sd">        :param topic_partition_offset: Topic Partition Offset object</span>
+<span class="sd">        :type topic_partition_offset: TopicPartitionOffset</span>
+<span class="sd">        :raises ConnectionError: if unable to connect to redis</span>
+<span class="sd">        :raises TimeoutError: if timeout has occurred</span>
+<span class="sd">        :raises Exception: if unhandled exception has occurred</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_commit_client</span><span class="o">.</span><span class="n">commit_offset</span><span class="p">(</span><span class="n">topic_partition_offset</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;kafka external commit failed for topic:</span><span class="si">{}</span><span class="s1">, partition:</span><span class="si">{}</span><span class="s1"> and offset:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topic_partition_offset</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">topic_partition_offset</span><span class="o">.</span><span class="n">partition</span><span class="p">,</span> <span class="n">topic_partition_offset</span><span class="o">.</span><span class="n">offset</span><span class="p">))</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ConnectionError</span><span class="p">,</span> <span class="ne">TimeoutError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.internal_commit"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.internal_commit">[docs]</a>    <span class="k">def</span> <span class="nf">internal_commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_partition_offset</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        commit the last read offsets</span>
+
+<span class="sd">        :param topic_partition_offset: list of topic, partition, tuple</span>
+<span class="sd">        :type topic_partition_offset: list(TopicPartitionOffset)</span>
+<span class="sd">        :raises CommitFailedError: if unable to commit to kafka. it occurs when consumer rebalanced happened</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">topic_partition_offset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">offsets</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="n">TopicPartition</span><span class="p">(</span><span class="n">topic_partition_offset</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">topic_partition_offset</span><span class="o">.</span><span class="n">partition</span><span class="p">):</span> <span class="n">OffsetAndMetadata</span><span class="p">(</span>
+                    <span class="n">topic_partition_offset</span><span class="o">.</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">offsets</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">commit</span><span class="p">(</span><span class="n">offsets</span><span class="o">=</span><span class="n">offsets</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">CommitFailedError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.commit_async"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.commit_async">[docs]</a>    <span class="k">def</span> <span class="nf">commit_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">offsets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Commit offsets to kafka_client asynchronously, optionally firing callback</span>
+<span class="sd">        This commits offsets only to Kafka</span>
+<span class="sd">        The offsets committed using this API will be used on the first fetch after every rebalance and also on startup</span>
+<span class="sd">        As such, if you need to store offsets in anything other than Kafka, this API should not be used</span>
+<span class="sd">        To avoid re-processing the last message read if a consumer is restarted, the committed offset should be the next message your application should consume, i.e.: last_offset + 1</span>
+
+<span class="sd">        :param offsets: dictionary of TopicPartition and OffsetAndMetadata</span>
+<span class="sd">        :type offsets: dict, optional</span>
+<span class="sd">        :param callback: Called as callback(offsets, response)</span>
+<span class="sd">        :type callback: function, optional</span>
+<span class="sd">        :raises CommitFailedError: if unable to commit to kafka. it occurs when consumer rebalanced happened</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">commit_async</span><span class="p">(</span><span class="n">offsets</span><span class="p">,</span> <span class="n">callback</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.commit"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.commit">[docs]</a>    <span class="k">def</span> <span class="nf">commit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic_partition_offset</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        commit the offsets to either internal client or external client</span>
+
+<span class="sd">        :param topic_partition_offset: Topic Partition Offset object</span>
+<span class="sd">        :type topic_partition_offset: TopicPartitionOffset</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_commit</span><span class="p">(</span><span class="n">topic_partition_offset</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Consumer.partitions_for_topic"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.partitions_for_topic">[docs]</a>    <span class="k">def</span> <span class="nf">partitions_for_topic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get metadata about the partitions for a given topic</span>
+
+<span class="sd">        :param topic: Topic to check</span>
+<span class="sd">        :type topic: str</span>
+<span class="sd">        :return: Partition ids</span>
+<span class="sd">        :rtype: set</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">partitions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">partitions_for_topic</span><span class="p">(</span><span class="n">topic</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">partitions</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">exc</span>
+
+<div class="viewcode-block" id="Consumer.on_partitions_assigned"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.on_partitions_assigned">[docs]</a>    <span class="k">def</span> <span class="nf">on_partitions_assigned</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assigned</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        list of assigned partitions after each consumer rebalance operation</span>
+
+<span class="sd">        :param assigned: list of topic partition objects</span>
+<span class="sd">        :type assigned: list(TopicPartition)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enable_external_commit</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">tp</span> <span class="ow">in</span> <span class="n">assigned</span><span class="p">:</span>
+                <span class="n">topic</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">topic</span>
+                <span class="n">partition</span> <span class="o">=</span> <span class="n">tp</span><span class="o">.</span><span class="n">partition</span>
+                <span class="n">tpo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">external_commit_client</span><span class="o">.</span><span class="n">get_topic_partition_offset</span><span class="p">(</span><span class="n">TopicPartitionOffset</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">partition</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;last committed offset for topic:</span><span class="si">{}</span><span class="s1"> , partition:</span><span class="si">{}</span><span class="s1"> is </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">topic</span><span class="p">,</span> <span class="n">partition</span><span class="p">,</span> <span class="n">tpo</span><span class="o">.</span><span class="n">offset</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">tpo</span><span class="o">.</span><span class="n">offset</span><span class="p">:</span></div>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">tp</span><span class="p">,</span> <span class="n">tpo</span><span class="o">.</span><span class="n">offset</span><span class="p">)</span>
+                    
+<div class="viewcode-block" id="Consumer.on_partitions_revoked"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.on_partitions_revoked">[docs]</a>    <span class="k">def</span> <span class="nf">on_partitions_revoked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">revoked</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        list of partitions revoked after each consumer rebalance operation</span>
+
+<span class="sd">        :param revoked: list of topic partition objects</span>
+<span class="sd">        :type revoked: list(TopicPartition)</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Consumer.get_rebalance_listener"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.get_rebalance_listener">[docs]</a>    <span class="k">def</span> <span class="nf">get_rebalance_listener</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; return the object of ConsumerRebalanceListener  &quot;&quot;&quot;</span>
+
+        <span class="n">HandleRebalanceListener</span> <span class="o">=</span> <span class="nb">type</span><span class="p">(</span><span class="s1">&#39;HandleRebalanceListener&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">ConsumerRebalanceListener</span><span class="p">,),</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;on_partitions_assigned&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_partitions_assigned</span><span class="p">,</span>
+                <span class="s1">&#39;on_partitions_revoked&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">on_partitions_revoked</span>
+             <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle_rebalance_listener</span> <span class="o">=</span> <span class="n">HandleRebalanceListener</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle_rebalance_listener</span>
+        
+<div class="viewcode-block" id="Consumer.deserialize_message"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.deserialize_message">[docs]</a>    <span class="k">def</span> <span class="nf">deserialize_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; deserialize the message &quot;&quot;&quot;</span></div>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Consumer.close"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_consumer.Consumer.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Close the consumer, we can commit the messages if needed before closing</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;closing kafka consumer consumer....&#39;</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">consumer_client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">kafka_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../license.html">license</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../support.html">support</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, pavan.tummalapalli@gmail.com.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

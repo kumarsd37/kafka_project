@@ -1,0 +1,286 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>framework.clients.kafka.kafka_producer &#8212; kafka_project 1.0.0-dev documentation</title>
+    <link rel="stylesheet" href="../../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for framework.clients.kafka.kafka_producer</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;pavan.tummalapalli&#39;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">kafka</span> <span class="k">import</span> <span class="n">KafkaProducer</span>
+<span class="kn">from</span> <span class="nn">kafka.errors</span> <span class="k">import</span> <span class="n">KafkaError</span><span class="p">,</span> <span class="n">KafkaTimeoutError</span>
+
+<span class="kn">from</span> <span class="nn">framework.abstract_client</span> <span class="k">import</span> <span class="n">AbstractProducer</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Producer"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer">[docs]</a><span class="k">class</span> <span class="nc">Producer</span><span class="p">(</span><span class="n">AbstractProducer</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        The producer is thread safe and sharing a single producer instance across</span>
+<span class="sd">        threads will generally be faster than having multiple instances.</span>
+
+<span class="sd">        sample configuration file:</span>
+<span class="sd">        ::</span>
+
+<span class="sd">            configs = {</span>
+
+<span class="sd">                &#39;response_timeout&#39;: 5,</span>
+<span class="sd">                &#39;connection_timeout&#39;: 5,</span>
+<span class="sd">                &#39;client_config&#39;: {</span>
+<span class="sd">                    &#39;bootstrap_servers&#39;: &#39;172.16.15.227:9092&#39;,</span>
+<span class="sd">                    &#39;client_id&#39;: &#39;_&#39;.join([TOPIC, &#39;producer_client&#39;]),</span>
+<span class="sd">                    &#39;acks&#39;: 1,</span>
+<span class="sd">                    &#39;retries&#39;: 1,</span>
+<span class="sd">                    &#39;batch_size&#39;: 16384,</span>
+<span class="sd">                    &#39;linger_ms&#39;: 5,</span>
+<span class="sd">                    &#39;buffer_memory&#39;: 33554432,</span>
+<span class="sd">                    &#39;connections_max_idle_ms&#39;: 9 * 60 * 1000,</span>
+<span class="sd">                    &#39;max_block_ms&#39;: 60000,</span>
+<span class="sd">                    &#39;max_request_size&#39;: 1048576,</span>
+<span class="sd">                    &#39;metadata_max_age_ms&#39;: 300000,</span>
+<span class="sd">                    &#39;retry_backoff_ms&#39;: 100,</span>
+<span class="sd">                    &#39;request_timeout_ms&#39;: 30000,</span>
+<span class="sd">                    &#39;max_in_flight_requests_per_connection&#39;: 5,</span>
+<span class="sd">                }</span>
+<span class="sd">            }</span>
+
+<span class="sd">        :keyword Arguments:</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">kwargs</span><span class="p">,</span> <span class="s1">&#39;unrecognized keyword arguments&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">configs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;topic&#39;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;client_config&#39;</span><span class="p">),</span> <span class="s1">&#39;unrecognized client_config&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_success_callback</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;success_callback&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_failure_callback</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;failure_callback&#39;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">producer_client</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;client_config&#39;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+<div class="viewcode-block" id="Producer.pre_send"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.pre_send">[docs]</a>    <span class="k">def</span> <span class="nf">pre_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span></div>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Producer.send"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.send">[docs]</a>    <span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; sends the message to specified topic &quot;&quot;&quot;</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_sync</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">message</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timestamp_ms</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timestamp_ms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        publish the message to topic synchronously</span>
+
+<span class="sd">        :param topic: topic where the message will be published</span>
+<span class="sd">        :type topic: str</span>
+<span class="sd">        :param key: a key to associate with the message. Can be used to determine which partition to send the message to. If partition is None (and producer’s partitioner config is left as default), then messages with the same key will be delivered to the same partition (but if key is None, partition is chosen randomly). Must be type bytes, or be serializable to bytes via configured key_serializer</span>
+<span class="sd">        (optional, default: None)</span>
+<span class="sd">        :type key: int, optional</span>
+<span class="sd">        :param value: message value. Must be type bytes, or be serializable to bytes via configured value_serializer. If value is None, key is required and message acts as a ‘delete’.</span>
+<span class="sd">        :type value: optional, byte</span>
+<span class="sd">        :param partition: optionally specify a partition. If not set, the partition will be selected using the configured ‘partitioner’</span>
+<span class="sd">        :type partition: int, optional</span>
+<span class="sd">        :param timestamp_ms: epoch milliseconds (from Jan 1 1970 UTC) to use as the message timestamp. Defaults to current time</span>
+<span class="sd">        :type timestamp_ms: int, optional</span>
+<span class="sd">        :return: resolves to RecordMetadata</span>
+<span class="sd">        :rtype:  FutureRecordMetadata</span>
+<span class="sd">        :raises KafkaError: if unable to send</span>
+<span class="sd">        :raises KafkaTimeoutError: if timeout has occurred</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">producer_client</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="n">partition</span><span class="p">,</span> <span class="n">timestamp_ms</span><span class="o">=</span><span class="n">timestamp_ms</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">future</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">KafkaError</span><span class="p">,</span> <span class="n">KafkaTimeoutError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">e</span>
+
+<div class="viewcode-block" id="Producer.send_sync"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.send_sync">[docs]</a>    <span class="k">def</span> <span class="nf">send_sync</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timestamp_ms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        publish the message to topic synchronously and return meta_data or if it fails to send,</span>
+<span class="sd">        it will raise an exception</span>
+
+<span class="sd">        :param topic: topic where the message will be published</span>
+<span class="sd">        :type topic: str</span>
+<span class="sd">        :param key: a key to associate with the message. Can be used to determine which partition to send the message to. If partition is None (and producer’s partitioner config is left as default), then messages with the same key will be delivered to the same partition (but if key is None, partition is chosen randomly). Must be type bytes, or be serializable to bytes via configured key_serializer</span>
+<span class="sd">        :type key: int, optional</span>
+<span class="sd">        :param value: message value. Must be type bytes, or be serializable to bytes via configured value_serializer. If value is None, key is required and message acts as a ‘delete’</span>
+<span class="sd">        :type value: optional, byte</span>
+<span class="sd">        :param partition: optionally specify a partition. If not set, the partition will be selected using the configured ‘partitioner’</span>
+<span class="sd">        :type partition: int, optional</span>
+<span class="sd">        :param timestamp_ms: epoch milliseconds (from Jan 1 1970 UTC) to use as the message timestamp. Defaults to current time</span>
+<span class="sd">        :type timestamp_ms: int, optional</span>
+<span class="sd">        :return: resolves to RecordMetadata</span>
+<span class="sd">        :rtype:  FutureRecordMetadata</span>
+<span class="sd">        :raises KafkaError: if unable to send</span>
+<span class="sd">        :raises KafkaTimeoutError: if timeout has occurred</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="n">partition</span><span class="p">,</span> <span class="n">timestamp_ms</span><span class="o">=</span><span class="n">timestamp_ms</span><span class="p">)</span>
+            <span class="n">meta_data</span> <span class="o">=</span> <span class="n">future</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;future_timeout&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;sent to oubound topic </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">, </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">meta_data</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">meta_data</span><span class="o">.</span><span class="n">partition</span><span class="p">,</span> <span class="n">meta_data</span><span class="o">.</span><span class="n">offset</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">meta_data</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">KafkaTimeoutError</span><span class="p">,</span> <span class="n">KafkaError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">exc_info</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">e</span>
+
+<div class="viewcode-block" id="Producer.send_async"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.send_async">[docs]</a>    <span class="k">def</span> <span class="nf">send_async</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">timestamp_ms</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        publish the message to kafka_client asynchronously. if success and failure callback handlers exists,</span>
+<span class="sd">        it will add to the FutureRecordMetadata</span>
+
+<span class="sd">        :param topic: topic where the message will be published</span>
+<span class="sd">        :type topic: str</span>
+<span class="sd">        :param key: a key to associate with the message. Can be used to determine which partition to send the message to. If partition is None (and producer’s partitioner config is left as default), then messages with the same key will be delivered to the same partition (but if key is None, partition is chosen randomly). Must be type bytes, or be serializable to bytes via configured key_serializer</span>
+<span class="sd">        :type key: int, optional</span>
+<span class="sd">        :param value: message value. Must be type bytes, or be serializable to bytes via configured value_serializer. If value is None, key is required and message acts as a ‘delete’</span>
+<span class="sd">        :type value: byte, optional</span>
+<span class="sd">        :param partition: optionally specify a partition. If not set, the partition will be selected using the configured ‘partitioner’</span>
+<span class="sd">        :type partition: int, optional</span>
+<span class="sd">        :param timestamp_ms: epoch milliseconds (from Jan 1 1970 UTC) to use as the message timestamp. Defaults to current time</span>
+<span class="sd">        :type timestamp_ms: int, optional</span>
+<span class="sd">        :return: resolves to RecordMetadata</span>
+<span class="sd">        :rtype:  FutureRecordMetadata</span>
+<span class="sd">        :raises KafkaError: if unable to send</span>
+<span class="sd">        :raises KafkaTimeoutError: if timeout has occurred</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_send</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="n">topic</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">partition</span><span class="o">=</span><span class="n">partition</span><span class="p">,</span> <span class="n">timestamp_ms</span><span class="o">=</span><span class="n">timestamp_ms</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_success_callback</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_failure_callback</span><span class="p">:</span>
+            <span class="n">future</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_success_callback</span><span class="p">)</span></div>
+            <span class="n">future</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_failure_callback</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Producer.post_send"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.post_send">[docs]</a>    <span class="k">def</span> <span class="nf">post_send</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span></div>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Producer.flush"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.flush">[docs]</a>    <span class="k">def</span> <span class="nf">flush</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Invoking this method makes all buffered records immediately available to send</span>
+<span class="sd">        (even if linger_ms is greater than 0) and blocks on the completion of the requests</span>
+<span class="sd">        associated with these records. The post-condition of flush() is that any previously sent</span>
+<span class="sd">        record will have completed (e.g. Future.is_done() == True). A request is considered</span>
+<span class="sd">        completed when either it is successfully acknowledged according to the ‘acks’ configuration</span>
+<span class="sd">        for the producer, or it results in an error.</span>
+<span class="sd">        Other threads can continue sending messages while one thread is blocked waiting for a flush call to complete; however, no guarantee is made about the completion of messages sent after the flush call begins</span>
+
+<span class="sd">        :param timeout: timeout in seconds to wait for completion</span>
+<span class="sd">        :type timeout: float, optional</span>
+<span class="sd">        :raises KafkaError: if unable to send</span>
+<span class="sd">        :raises KafkaTimeoutError: if timeout has occurred</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">producer_client</span><span class="o">.</span><span class="n">flush</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">KafkaTimeoutError</span><span class="p">,</span> <span class="n">KafkaError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span></div>
+            <span class="k">raise</span> <span class="n">e</span>
+
+<div class="viewcode-block" id="Producer.serialize_message"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.serialize_message">[docs]</a>    <span class="k">def</span> <span class="nf">serialize_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; serialize the message &quot;&quot;&quot;</span></div>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Producer.close"><a class="viewcode-back" href="../../../../api/framework.clients.kafka.html#framework.clients.kafka.kafka_producer.Producer.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; close the producer&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;closing producer...&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">producer_client</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">configs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;close_timeout&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">5</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">KafkaError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span></div></div>
+            <span class="k">raise</span> <span class="n">e</span>
+
+
+<span class="c1"># todo : keys , partitions for sending in kafka_client need to initialing the producer client</span>
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../../index.html">kafka_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../api/modules.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../license.html">license</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../support.html">support</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, pavan.tummalapalli@gmail.com.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,207 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>framework.utils.log &#8212; kafka_project 1.0.0-dev documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for framework.utils.log</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">kafka.errors</span> <span class="k">import</span> <span class="n">KafkaError</span>
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;pavan.tummalapalli&#39;</span>
+
+<span class="kn">import</span> <span class="nn">zlib</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">logging.handlers</span> <span class="k">import</span> <span class="n">RotatingFileHandler</span>
+<span class="kn">from</span> <span class="nn">logging</span> <span class="k">import</span> <span class="n">addLevelName</span><span class="p">,</span> <span class="n">NOTSET</span>
+<span class="kn">from</span> <span class="nn">kafka</span> <span class="k">import</span> <span class="n">KafkaProducer</span>
+<span class="kn">import</span> <span class="nn">logging.config</span>
+
+
+<span class="n">EVENT</span> <span class="o">=</span> <span class="mi">25</span>
+
+<span class="c1"># scenario -1</span>
+<div class="viewcode-block" id="CustomLogger"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.CustomLogger">[docs]</a><span class="k">class</span> <span class="nc">CustomLogger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    custom logger to add additional logging levels and logging functions.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">NOTSET</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
+
+        <span class="n">addLevelName</span><span class="p">(</span><span class="n">EVENT</span><span class="p">,</span> <span class="s2">&quot;EVENT&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="CustomLogger.event"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.CustomLogger.event">[docs]</a>    <span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">EVENT</span><span class="p">):</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">EVENT</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+
+<span class="c1"># scenario - 2</span>
+<span class="n">addLevelName</span><span class="p">(</span><span class="n">EVENT</span><span class="p">,</span> <span class="s2">&quot;EVENT&quot;</span><span class="p">)</span>
+<div class="viewcode-block" id="event"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.event">[docs]</a><span class="k">def</span> <span class="nf">event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
+    <span class="c1"># Yes, logger takes its &#39;*args&#39; as &#39;args&#39;.</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">isEnabledFor</span><span class="p">(</span><span class="n">EVENT</span><span class="p">):</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_log</span><span class="p">(</span><span class="n">EVENT</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ZippedRotatingFileHandler"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.ZippedRotatingFileHandler">[docs]</a><span class="k">class</span> <span class="nc">ZippedRotatingFileHandler</span><span class="p">(</span><span class="n">RotatingFileHandler</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ZippedRotatingFileHandler.namer"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.ZippedRotatingFileHandler.namer">[docs]</a>    <span class="k">def</span> <span class="nf">namer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        It will override base function to rename the filename with .gz extension.</span>
+
+<span class="sd">        :param name: name of the file</span>
+<span class="sd">        :type name: str</span>
+<span class="sd">        :return: filename with .gz extension</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        &quot;&quot;&quot;</span></div>
+        <span class="k">return</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.gz&quot;</span>
+
+<div class="viewcode-block" id="ZippedRotatingFileHandler.rotator"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.ZippedRotatingFileHandler.rotator">[docs]</a>    <span class="k">def</span> <span class="nf">rotator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">,</span> <span class="n">dest</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        rotator will compress the source data and writes to destination.</span>
+
+<span class="sd">        :param source: source of the file</span>
+<span class="sd">        :type source: str</span>
+<span class="sd">        :param dest: destination of the compressed file</span>
+<span class="sd">        :type dest: str</span>
+<span class="sd">        :return: None</span>
+<span class="sd">        :rtype: None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">sf</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">sf</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">compressed</span> <span class="o">=</span> <span class="n">zlib</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s2">&quot;wb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">df</span><span class="p">:</span>
+                <span class="n">df</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">compressed</span><span class="p">)</span></div></div>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">source</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="KafkaLoggingHandler"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.KafkaLoggingHandler">[docs]</a><span class="k">class</span> <span class="nc">KafkaLoggingHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hosts_list</span><span class="p">,</span> <span class="n">topic</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        constructor for kafka_client logging handler.</span>
+
+<span class="sd">        :param hosts_list: bootstrap_servers</span>
+<span class="sd">        :type hosts_list: union(str, list)</span>
+<span class="sd">        :param topic: topic to send to logs</span>
+<span class="sd">        :type topic: str</span>
+<span class="sd">        :param kwargs: Additional kafka_client producer keyword arguments</span>
+<span class="sd">        :type kwargs: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">kafka_producer</span> <span class="o">=</span> <span class="n">KafkaProducer</span><span class="p">(</span><span class="n">bootstrap_servers</span><span class="o">=</span><span class="n">hosts_list</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topic</span> <span class="o">=</span> <span class="n">topic</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close_timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;close_timeout&#39;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+
+<div class="viewcode-block" id="KafkaLoggingHandler.emit"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.KafkaLoggingHandler.emit">[docs]</a>    <span class="k">def</span> <span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">levelno</span> <span class="o">==</span> <span class="mi">25</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                <span class="n">future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kafka_producer</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">topic</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topic</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kafka_producer</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">KafkaError</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">exc</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">handleError</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span></div>
+            <span class="k">return</span>
+
+<div class="viewcode-block" id="KafkaLoggingHandler.close"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.log.KafkaLoggingHandler.close">[docs]</a>    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kafka_producer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kafka_producer</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">close_timeout</span><span class="p">)</span></div></div>
+        <span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">kafka_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">license</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../support.html">support</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, pavan.tummalapalli@gmail.com.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

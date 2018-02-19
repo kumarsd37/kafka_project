@@ -1,0 +1,1494 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>framework.clients.kafka package &#8212; kafka_project 1.0.0-dev documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="framework.clients.splunk package" href="framework.clients.splunk.html" />
+    <link rel="prev" title="framework.clients.influxdb package" href="framework.clients.influxdb.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="framework-clients-kafka-package">
+<h1>framework.clients.kafka package<a class="headerlink" href="#framework-clients-kafka-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-framework.clients.kafka.dao">
+<span id="framework-clients-kafka-dao-module"></span><h2>framework.clients.kafka.dao module<a class="headerlink" href="#module-framework.clients.kafka.dao" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.clients.kafka.dao.KafkaDAO">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.dao.</code><code class="descname">KafkaDAO</code><a class="reference internal" href="../_modules/framework/clients/kafka/dao.html#KafkaDAO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.dao.KafkaDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">abc.ABC</span></code></p>
+<dl class="method">
+<dt id="framework.clients.kafka.dao.KafkaDAO.commit_offset">
+<code class="descname">commit_offset</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/dao.html#KafkaDAO.commit_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.dao.KafkaDAO.commit_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the offsets synchronously</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – TopicPartitionOffset object consists of topic, partition, offset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">boolean value for success or failure</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.dao.KafkaDAO.get_all_topics_partitions_offset">
+<code class="descname">get_all_topics_partitions_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/dao.html#KafkaDAO.get_all_topics_partitions_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.dao.KafkaDAO.get_all_topics_partitions_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all topics partitions offsets</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.dao.KafkaDAO.get_topic_all_partitions_offset">
+<code class="descname">get_topic_all_partitions_offset</code><span class="sig-paren">(</span><em>topic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/dao.html#KafkaDAO.get_topic_all_partitions_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.dao.KafkaDAO.get_topic_all_partitions_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all topic partitions offset</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic</strong> (<em>topic name to get partitions and offsets</em>) – TopicPartitionOffset object with topic and partitions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of TopicPartitionOffset object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(TopicPartitionOffset)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.dao.KafkaDAO.get_topic_partition_offset">
+<code class="descname">get_topic_partition_offset</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/dao.html#KafkaDAO.get_topic_partition_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.dao.KafkaDAO.get_topic_partition_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the offset for the specified topic and partition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – TopicPartitionOffset object with topic and partition</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">record of TopicPartitionOffset</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">TopicPartitionOffset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.clients.kafka.kafka_consumer">
+<span id="framework-clients-kafka-kafka-consumer-module"></span><h2>framework.clients.kafka.kafka_consumer module<a class="headerlink" href="#module-framework.clients.kafka.kafka_consumer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.kafka_consumer.</code><code class="descname">Consumer</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="framework.abstract_client.html#framework.abstract_client.consumer.AbstractConsumer" title="framework.abstract_client.consumer.AbstractConsumer"><code class="xref py py-class docutils literal notranslate"><span class="pre">framework.abstract_client.consumer.AbstractConsumer</span></code></a></p>
+<p>constructor for kafka consumer</p>
+<p>:keyword Arguments</p>
+<ul class="simple">
+<li>name (<cite>str</cite>) - name of the inbound client to create</li>
+<li><dl class="first docutils">
+<dt>config (<cite>dict</cite>) - config of kafka consumer client</dt>
+<dd><ul class="first last">
+<li>topics (<cite>list</cite>) - list of topics to be subscribed by the each consumer</li>
+<li>enable_external_commit (<cite>bool</cite>) - If True, offsets are stored at external client</li>
+<li><dl class="first docutils">
+<dt>external_commit_config (<cite>dict</cite>) - config for external commit client</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>redis (<cite>dict</cite>) -  config for storing external commit</dt>
+<dd><ul class="first last">
+<li>namespace (<cite>str</cite>) - common prefix for set of keys, which uniquely identifies the set of keys among all the keys.</li>
+<li>delimiter (<cite>str</cite>) - used in between joining namespace and key</li>
+<li><dl class="first docutils">
+<dt>client_config (<cite>dict</cite>) - redis client config</dt>
+<dd><ul class="first last">
+<li>host (<cite>str</cite>) - redis host</li>
+<li>port (<cite>str</cite>) - redis port</li>
+<li>password (<cite>str</cite>) - redis password. default null</li>
+<li>db_number (<cite>int</cite>) - By default redis open 16 db’s while creating connection. we can specify specific db number to open it at the time of creating the connection.</li>
+<li>max_connections (<cite>int</cite>) - maximum number of connections to be opened in pooling.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>client-config: (<cite>dict</cite>) - kafka python consumer client settings</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">kafka consumer client Configuration parameters are described in more detail at <a class="reference external" href="http://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer">http://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer</a>.html#</p>
+</div>
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.subscribe">
+<code class="descname">subscribe</code><span class="sig-paren">(</span><em>topics</em>, <em>listener=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>subscribe to list of topics to be specified. if consumer group_id is specified, listener will be
+invoked at the time of each rebalance operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>topics</strong> (<em>list</em>) – list of topics</li>
+<li><strong>listener</strong> (<em>ConsumerRebalanceListener</em>) – object of kafka-python ConsumerRebalanceListener (optional, default: None)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first">KafkaError: if not able to subscribe to topics</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>Exception</strong> – unhandled exception</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.seek">
+<code class="descname">seek</code><span class="sig-paren">(</span><em>topic_partition</em>, <em>offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.seek"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>seek to specific partition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>topic_partition</strong> (<em>TopicPartition</em>) – topic_partition object consists of topic and offset</li>
+<li><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – offset to seek</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.assign">
+<code class="descname">assign</code><span class="sig-paren">(</span><em>topic_partitions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.assign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.assign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually assign a list of TopicPartitions to this consumer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partitions</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>KafkaError</strong> – if unable to assign the partition</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.assignment">
+<code class="descname">assignment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.assignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the TopicPartitions currently assigned to this consumer</p>
+<p>If partitions were directly assigned using
+<a class="reference internal" href="#framework.clients.kafka.kafka_consumer.Consumer.assign" title="framework.clients.kafka.kafka_consumer.Consumer.assign"><code class="xref py py-meth docutils literal notranslate"><span class="pre">assign()</span></code></a>, then this will simply return the
+same partitions that were previously assigned.  If topics were
+subscribed using <a class="reference internal" href="#framework.clients.kafka.kafka_consumer.Consumer.subscribe" title="framework.clients.kafka.kafka_consumer.Consumer.subscribe"><code class="xref py py-meth docutils literal notranslate"><span class="pre">subscribe()</span></code></a>, then this will
+give the set of topic partitions currently assigned to the consumer
+(which may be None if the assignment hasn’t happened yet, or if the
+partitions are in the process of being reassigned)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">{TopicPartition, …}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#set" title="(in Python v2.7)">set</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.beginning_offsets">
+<code class="descname">beginning_offsets</code><span class="sig-paren">(</span><em>topic_partitions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.beginning_offsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.beginning_offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the first offset for the given partitions
+This method does not change the current consumer position of the partitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partitions</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic_partitions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The earliest available offsets for the given partitions</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list({TopicPartition: int})</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>KafkaError</strong> – if not able to find the beginning offsets</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.seek_to_beginning">
+<code class="descname">seek_to_beginning</code><span class="sig-paren">(</span><em>topic_partitions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.seek_to_beginning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.seek_to_beginning" title="Permalink to this definition">¶</a></dt>
+<dd><p>seek to beginning of the partitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partitions</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.pre_consume">
+<code class="descname">pre_consume</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.pre_consume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.pre_consume" title="Permalink to this definition">¶</a></dt>
+<dd><p>operation need to be performed before pre consume</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.consume">
+<code class="descname">consume</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.consume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.consume" title="Permalink to this definition">¶</a></dt>
+<dd><p>consumes the batch of messages from polling</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.post_consume">
+<code class="descname">post_consume</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.post_consume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.post_consume" title="Permalink to this definition">¶</a></dt>
+<dd><p>operation need to performed after consuming the message</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.create_external_commit_dao">
+<em class="property">static </em><code class="descname">create_external_commit_dao</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.create_external_commit_dao"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.create_external_commit_dao" title="Permalink to this definition">¶</a></dt>
+<dd><p>create external commit client object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – config of redis</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">external commit client object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">KafkaRedisOffsetCommitDAO</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.external_commit">
+<code class="descname">external_commit</code><span class="sig-paren">(</span><em>topic_partition_offset=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.external_commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.external_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the offset to external client</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – Topic Partition Offset object</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ConnectionError</strong> – if unable to connect to redis</li>
+<li><strong>TimeoutError</strong> – if timeout has occurred</li>
+<li><strong>Exception</strong> – if unhandled exception has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.internal_commit">
+<code class="descname">internal_commit</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.internal_commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.internal_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the last read offsets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>list</em><em>(</em><em>TopicPartitionOffset</em><em>)</em>) – list of topic, partition, tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>CommitFailedError</strong> – if unable to commit to kafka. it occurs when consumer rebalanced happened</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.commit_async">
+<code class="descname">commit_async</code><span class="sig-paren">(</span><em>offsets=None</em>, <em>callback=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.commit_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.commit_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit offsets to kafka_client asynchronously, optionally firing callback
+This commits offsets only to Kafka
+The offsets committed using this API will be used on the first fetch after every rebalance and also on startup
+As such, if you need to store offsets in anything other than Kafka, this API should not be used
+To avoid re-processing the last message read if a consumer is restarted, the committed offset should be the next message your application should consume, i.e.: last_offset + 1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>offsets</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary of TopicPartition and OffsetAndMetadata</li>
+<li><strong>callback</strong> (<em>function</em><em>, </em><em>optional</em>) – Called as callback(offsets, response)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>CommitFailedError</strong> – if unable to commit to kafka. it occurs when consumer rebalanced happened</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.commit">
+<code class="descname">commit</code><span class="sig-paren">(</span><em>topic_partition_offset=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the offsets to either internal client or external client</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – Topic Partition Offset object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.partitions_for_topic">
+<code class="descname">partitions_for_topic</code><span class="sig-paren">(</span><em>topic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.partitions_for_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.partitions_for_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get metadata about the partitions for a given topic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Topic to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Partition ids</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#set" title="(in Python v2.7)">set</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.on_partitions_assigned">
+<code class="descname">on_partitions_assigned</code><span class="sig-paren">(</span><em>assigned</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.on_partitions_assigned"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.on_partitions_assigned" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of assigned partitions after each consumer rebalance operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>assigned</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.on_partitions_revoked">
+<code class="descname">on_partitions_revoked</code><span class="sig-paren">(</span><em>revoked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.on_partitions_revoked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.on_partitions_revoked" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of partitions revoked after each consumer rebalance operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>revoked</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.get_rebalance_listener">
+<code class="descname">get_rebalance_listener</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.get_rebalance_listener"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.get_rebalance_listener" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the object of ConsumerRebalanceListener</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.deserialize_message">
+<code class="descname">deserialize_message</code><span class="sig-paren">(</span><em>message</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.deserialize_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.deserialize_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>deserialize the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_consumer.Consumer.close">
+<code class="descname">close</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_consumer.Consumer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the consumer, we can commit the messages if needed before closing</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.clients.kafka.kafka_producer">
+<span id="framework-clients-kafka-kafka-producer-module"></span><h2>framework.clients.kafka.kafka_producer module<a class="headerlink" href="#module-framework.clients.kafka.kafka_producer" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.clients.kafka.kafka_producer.Producer">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.kafka_producer.</code><code class="descname">Producer</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="framework.abstract_client.html#framework.abstract_client.producer.AbstractProducer" title="framework.abstract_client.producer.AbstractProducer"><code class="xref py py-class docutils literal notranslate"><span class="pre">framework.abstract_client.producer.AbstractProducer</span></code></a></p>
+<p>The producer is thread safe and sharing a single producer instance across
+threads will generally be faster than having multiple instances.</p>
+<p>sample configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configs</span> <span class="o">=</span> <span class="p">{</span>
+
+    <span class="s1">&#39;response_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;connection_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;client_config&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;bootstrap_servers&#39;</span><span class="p">:</span> <span class="s1">&#39;172.16.15.227:9092&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;client_id&#39;</span><span class="p">:</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">TOPIC</span><span class="p">,</span> <span class="s1">&#39;producer_client&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;acks&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;retries&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="mi">16384</span><span class="p">,</span>
+        <span class="s1">&#39;linger_ms&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s1">&#39;buffer_memory&#39;</span><span class="p">:</span> <span class="mi">33554432</span><span class="p">,</span>
+        <span class="s1">&#39;connections_max_idle_ms&#39;</span><span class="p">:</span> <span class="mi">9</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s1">&#39;max_block_ms&#39;</span><span class="p">:</span> <span class="mi">60000</span><span class="p">,</span>
+        <span class="s1">&#39;max_request_size&#39;</span><span class="p">:</span> <span class="mi">1048576</span><span class="p">,</span>
+        <span class="s1">&#39;metadata_max_age_ms&#39;</span><span class="p">:</span> <span class="mi">300000</span><span class="p">,</span>
+        <span class="s1">&#39;retry_backoff_ms&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;request_timeout_ms&#39;</span><span class="p">:</span> <span class="mi">30000</span><span class="p">,</span>
+        <span class="s1">&#39;max_in_flight_requests_per_connection&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Arguments</strong> – </td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.pre_send">
+<code class="descname">pre_send</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.pre_send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.pre_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>operations to be performed before send method call</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>sends the message to specified topic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.send_sync">
+<code class="descname">send_sync</code><span class="sig-paren">(</span><em>topic=None</em>, <em>key=None</em>, <em>value=None</em>, <em>partition=None</em>, <em>timestamp_ms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.send_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.send_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>publish the message to topic synchronously and return meta_data or if it fails to send,
+it will raise an exception</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – topic where the message will be published</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – a key to associate with the message. Can be used to determine which partition to send the message to. If partition is None (and producer’s partitioner config is left as default), then messages with the same key will be delivered to the same partition (but if key is None, partition is chosen randomly). Must be type bytes, or be serializable to bytes via configured key_serializer</li>
+<li><strong>value</strong> (<em>optional</em><em>, </em><em>byte</em>) – message value. Must be type bytes, or be serializable to bytes via configured value_serializer. If value is None, key is required and message acts as a ‘delete’</li>
+<li><strong>partition</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – optionally specify a partition. If not set, the partition will be selected using the configured ‘partitioner’</li>
+<li><strong>timestamp_ms</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – epoch milliseconds (from Jan 1 1970 UTC) to use as the message timestamp. Defaults to current time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">resolves to RecordMetadata</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">FutureRecordMetadata</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>KafkaError</strong> – if unable to send</li>
+<li><strong>KafkaTimeoutError</strong> – if timeout has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.send_async">
+<code class="descname">send_async</code><span class="sig-paren">(</span><em>topic=None</em>, <em>key=None</em>, <em>value=None</em>, <em>partition=None</em>, <em>timestamp_ms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.send_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.send_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>publish the message to kafka_client asynchronously. if success and failure callback handlers exists,
+it will add to the FutureRecordMetadata</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – topic where the message will be published</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – a key to associate with the message. Can be used to determine which partition to send the message to. If partition is None (and producer’s partitioner config is left as default), then messages with the same key will be delivered to the same partition (but if key is None, partition is chosen randomly). Must be type bytes, or be serializable to bytes via configured key_serializer</li>
+<li><strong>value</strong> (<em>byte</em><em>, </em><em>optional</em>) – message value. Must be type bytes, or be serializable to bytes via configured value_serializer. If value is None, key is required and message acts as a ‘delete’</li>
+<li><strong>partition</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – optionally specify a partition. If not set, the partition will be selected using the configured ‘partitioner’</li>
+<li><strong>timestamp_ms</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – epoch milliseconds (from Jan 1 1970 UTC) to use as the message timestamp. Defaults to current time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">resolves to RecordMetadata</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">FutureRecordMetadata</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>KafkaError</strong> – if unable to send</li>
+<li><strong>KafkaTimeoutError</strong> – if timeout has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.post_send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.post_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>operations to be performed after send method call</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invoking this method makes all buffered records immediately available to send
+(even if linger_ms is greater than 0) and blocks on the completion of the requests
+associated with these records. The post-condition of flush() is that any previously sent
+record will have completed (e.g. Future.is_done() == True). A request is considered
+completed when either it is successfully acknowledged according to the ‘acks’ configuration
+for the producer, or it results in an error.
+Other threads can continue sending messages while one thread is blocked waiting for a flush call to complete; however, no guarantee is made about the completion of messages sent after the flush call begins</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – timeout in seconds to wait for completion</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>KafkaError</strong> – if unable to send</li>
+<li><strong>KafkaTimeoutError</strong> – if timeout has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.serialize_message">
+<code class="descname">serialize_message</code><span class="sig-paren">(</span><em>message</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.serialize_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.serialize_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>serialize the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.kafka_producer.Producer.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.kafka_producer.Producer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>close the producer</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.clients.kafka.meta">
+<span id="framework-clients-kafka-meta-module"></span><h2>framework.clients.kafka.meta module<a class="headerlink" href="#module-framework.clients.kafka.meta" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.clients.kafka.meta.TopicPartitionOffset">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.meta.</code><code class="descname">TopicPartitionOffset</code><span class="sig-paren">(</span><em>topic</em>, <em>partition</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#framework.clients.kafka.meta.TopicPartitionOffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of TopicPartitionOffset(topic, partition, offset)</p>
+<dl class="attribute">
+<dt id="framework.clients.kafka.meta.TopicPartitionOffset.offset">
+<code class="descname">offset</code><a class="headerlink" href="#framework.clients.kafka.meta.TopicPartitionOffset.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="framework.clients.kafka.meta.TopicPartitionOffset.partition">
+<code class="descname">partition</code><a class="headerlink" href="#framework.clients.kafka.meta.TopicPartitionOffset.partition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="framework.clients.kafka.meta.TopicPartitionOffset.topic">
+<code class="descname">topic</code><a class="headerlink" href="#framework.clients.kafka.meta.TopicPartitionOffset.topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.clients.kafka.redis_commit">
+<span id="framework-clients-kafka-redis-commit-module"></span><h2>framework.clients.kafka.redis_commit module<a class="headerlink" href="#module-framework.clients.kafka.redis_commit" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.redis_commit.</code><code class="descname">KafkaRedisOffsetCommitDAO</code><span class="sig-paren">(</span><em>pooled_redis_connection</em>, <em>namespace=None</em>, <em>delimiter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#framework.clients.kafka.dao.KafkaDAO" title="framework.clients.kafka.dao.KafkaDAO"><code class="xref py py-class docutils literal notranslate"><span class="pre">framework.clients.kafka.dao.KafkaDAO</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pooled_redis_connection</strong> (<em>MySQLPool</em>) – pooled mysql connection client</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.commit_offset">
+<code class="descname">commit_offset</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.commit_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.commit_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the offsets synchronously</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – TopicPartitionOffset object consists of topic, partition, offset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">boolean value for success or failure</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.get_all_topics_partitions_offset">
+<code class="descname">get_all_topics_partitions_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.get_all_topics_partitions_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.get_all_topics_partitions_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all topics partitions offsets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of TopicPartitionOffset object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(TopicPartitionOffset)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.get_topic_all_partitions_offset">
+<code class="descname">get_topic_all_partitions_offset</code><span class="sig-paren">(</span><em>topic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.get_topic_all_partitions_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.get_topic_all_partitions_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all topic partitions offset</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – topic name to get partitions and offsets</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of TopicPartitionOffset object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(TopicPartitionOffset)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.get_topic_partition_offset">
+<code class="descname">get_topic_partition_offset</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.get_topic_partition_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.get_topic_partition_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the offset for the specified topic and partition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – TopicPartitionOffset object with topic and partition</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">record of TopicPartitionOffset</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">TopicPartitionOffset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.create_topic_partition_list">
+<code class="descname">create_topic_partition_list</code><span class="sig-paren">(</span><em>keys_with_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.create_topic_partition_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.redis_commit.KafkaRedisOffsetCommitDAO.create_topic_partition_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>create topic partition offset list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>keys_with_values</strong> (<em>list</em><em>(</em><em>tuple</em><em>(</em><em>key</em><em>, </em><em>value</em><em>)</em><em>)</em>) – list of tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of TopicPartitionOffset objects consists of topic partition and offset</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(TopicPartitionOffset)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.clients.kafka">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-framework.clients.kafka" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.clients.kafka.Producer">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.</code><code class="descname">Producer</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="framework.abstract_client.html#framework.abstract_client.producer.AbstractProducer" title="framework.abstract_client.producer.AbstractProducer"><code class="xref py py-class docutils literal notranslate"><span class="pre">framework.abstract_client.producer.AbstractProducer</span></code></a></p>
+<p>The producer is thread safe and sharing a single producer instance across
+threads will generally be faster than having multiple instances.</p>
+<p>sample configuration file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">configs</span> <span class="o">=</span> <span class="p">{</span>
+
+    <span class="s1">&#39;response_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;connection_timeout&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="s1">&#39;client_config&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;bootstrap_servers&#39;</span><span class="p">:</span> <span class="s1">&#39;172.16.15.227:9092&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;client_id&#39;</span><span class="p">:</span> <span class="s1">&#39;_&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">TOPIC</span><span class="p">,</span> <span class="s1">&#39;producer_client&#39;</span><span class="p">]),</span>
+        <span class="s1">&#39;acks&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;retries&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s1">&#39;batch_size&#39;</span><span class="p">:</span> <span class="mi">16384</span><span class="p">,</span>
+        <span class="s1">&#39;linger_ms&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+        <span class="s1">&#39;buffer_memory&#39;</span><span class="p">:</span> <span class="mi">33554432</span><span class="p">,</span>
+        <span class="s1">&#39;connections_max_idle_ms&#39;</span><span class="p">:</span> <span class="mi">9</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s1">&#39;max_block_ms&#39;</span><span class="p">:</span> <span class="mi">60000</span><span class="p">,</span>
+        <span class="s1">&#39;max_request_size&#39;</span><span class="p">:</span> <span class="mi">1048576</span><span class="p">,</span>
+        <span class="s1">&#39;metadata_max_age_ms&#39;</span><span class="p">:</span> <span class="mi">300000</span><span class="p">,</span>
+        <span class="s1">&#39;retry_backoff_ms&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+        <span class="s1">&#39;request_timeout_ms&#39;</span><span class="p">:</span> <span class="mi">30000</span><span class="p">,</span>
+        <span class="s1">&#39;max_in_flight_requests_per_connection&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Arguments</strong> – </td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.pre_send">
+<code class="descname">pre_send</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.pre_send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.pre_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>operations to be performed before send method call</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.send">
+<code class="descname">send</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>sends the message to specified topic</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.send_sync">
+<code class="descname">send_sync</code><span class="sig-paren">(</span><em>topic=None</em>, <em>key=None</em>, <em>value=None</em>, <em>partition=None</em>, <em>timestamp_ms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.send_sync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.send_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>publish the message to topic synchronously and return meta_data or if it fails to send,
+it will raise an exception</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – topic where the message will be published</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – a key to associate with the message. Can be used to determine which partition to send the message to. If partition is None (and producer’s partitioner config is left as default), then messages with the same key will be delivered to the same partition (but if key is None, partition is chosen randomly). Must be type bytes, or be serializable to bytes via configured key_serializer</li>
+<li><strong>value</strong> (<em>optional</em><em>, </em><em>byte</em>) – message value. Must be type bytes, or be serializable to bytes via configured value_serializer. If value is None, key is required and message acts as a ‘delete’</li>
+<li><strong>partition</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – optionally specify a partition. If not set, the partition will be selected using the configured ‘partitioner’</li>
+<li><strong>timestamp_ms</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – epoch milliseconds (from Jan 1 1970 UTC) to use as the message timestamp. Defaults to current time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">resolves to RecordMetadata</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">FutureRecordMetadata</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>KafkaError</strong> – if unable to send</li>
+<li><strong>KafkaTimeoutError</strong> – if timeout has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.send_async">
+<code class="descname">send_async</code><span class="sig-paren">(</span><em>topic=None</em>, <em>key=None</em>, <em>value=None</em>, <em>partition=None</em>, <em>timestamp_ms=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.send_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.send_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>publish the message to kafka_client asynchronously. if success and failure callback handlers exists,
+it will add to the FutureRecordMetadata</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – topic where the message will be published</li>
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – a key to associate with the message. Can be used to determine which partition to send the message to. If partition is None (and producer’s partitioner config is left as default), then messages with the same key will be delivered to the same partition (but if key is None, partition is chosen randomly). Must be type bytes, or be serializable to bytes via configured key_serializer</li>
+<li><strong>value</strong> (<em>byte</em><em>, </em><em>optional</em>) – message value. Must be type bytes, or be serializable to bytes via configured value_serializer. If value is None, key is required and message acts as a ‘delete’</li>
+<li><strong>partition</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – optionally specify a partition. If not set, the partition will be selected using the configured ‘partitioner’</li>
+<li><strong>timestamp_ms</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a><em>, </em><em>optional</em>) – epoch milliseconds (from Jan 1 1970 UTC) to use as the message timestamp. Defaults to current time</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">resolves to RecordMetadata</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">FutureRecordMetadata</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>KafkaError</strong> – if unable to send</li>
+<li><strong>KafkaTimeoutError</strong> – if timeout has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.post_send">
+<code class="descname">post_send</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.post_send"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.post_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>operations to be performed after send method call</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.flush">
+<code class="descname">flush</code><span class="sig-paren">(</span><em>timeout=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.flush"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.flush" title="Permalink to this definition">¶</a></dt>
+<dd><p>Invoking this method makes all buffered records immediately available to send
+(even if linger_ms is greater than 0) and blocks on the completion of the requests
+associated with these records. The post-condition of flush() is that any previously sent
+record will have completed (e.g. Future.is_done() == True). A request is considered
+completed when either it is successfully acknowledged according to the ‘acks’ configuration
+for the producer, or it results in an error.
+Other threads can continue sending messages while one thread is blocked waiting for a flush call to complete; however, no guarantee is made about the completion of messages sent after the flush call begins</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a><em>, </em><em>optional</em>) – timeout in seconds to wait for completion</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>KafkaError</strong> – if unable to send</li>
+<li><strong>KafkaTimeoutError</strong> – if timeout has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.serialize_message">
+<code class="descname">serialize_message</code><span class="sig-paren">(</span><em>message</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.serialize_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.serialize_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>serialize the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Producer.close">
+<code class="descname">close</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_producer.html#Producer.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Producer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>close the producer</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="framework.clients.kafka.Consumer">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.</code><code class="descname">Consumer</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="framework.abstract_client.html#framework.abstract_client.consumer.AbstractConsumer" title="framework.abstract_client.consumer.AbstractConsumer"><code class="xref py py-class docutils literal notranslate"><span class="pre">framework.abstract_client.consumer.AbstractConsumer</span></code></a></p>
+<p>constructor for kafka consumer</p>
+<p>:keyword Arguments</p>
+<ul class="simple">
+<li>name (<cite>str</cite>) - name of the inbound client to create</li>
+<li><dl class="first docutils">
+<dt>config (<cite>dict</cite>) - config of kafka consumer client</dt>
+<dd><ul class="first last">
+<li>topics (<cite>list</cite>) - list of topics to be subscribed by the each consumer</li>
+<li>enable_external_commit (<cite>bool</cite>) - If True, offsets are stored at external client</li>
+<li><dl class="first docutils">
+<dt>external_commit_config (<cite>dict</cite>) - config for external commit client</dt>
+<dd><ul class="first last">
+<li><dl class="first docutils">
+<dt>redis (<cite>dict</cite>) -  config for storing external commit</dt>
+<dd><ul class="first last">
+<li>namespace (<cite>str</cite>) - common prefix for set of keys, which uniquely identifies the set of keys among all the keys.</li>
+<li>delimiter (<cite>str</cite>) - used in between joining namespace and key</li>
+<li><dl class="first docutils">
+<dt>client_config (<cite>dict</cite>) - redis client config</dt>
+<dd><ul class="first last">
+<li>host (<cite>str</cite>) - redis host</li>
+<li>port (<cite>str</cite>) - redis port</li>
+<li>password (<cite>str</cite>) - redis password. default null</li>
+<li>db_number (<cite>int</cite>) - By default redis open 16 db’s while creating connection. we can specify specific db number to open it at the time of creating the connection.</li>
+<li>max_connections (<cite>int</cite>) - maximum number of connections to be opened in pooling.</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</li>
+<li>client-config: (<cite>dict</cite>) - kafka python consumer client settings</li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">kafka consumer client Configuration parameters are described in more detail at <a class="reference external" href="http://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer">http://kafka-python.readthedocs.io/en/master/apidoc/KafkaConsumer</a>.html#</p>
+</div>
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.subscribe">
+<code class="descname">subscribe</code><span class="sig-paren">(</span><em>topics</em>, <em>listener=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.subscribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.subscribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>subscribe to list of topics to be specified. if consumer group_id is specified, listener will be
+invoked at the time of each rebalance operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>topics</strong> (<em>list</em>) – list of topics</li>
+<li><strong>listener</strong> (<em>ConsumerRebalanceListener</em>) – object of kafka-python ConsumerRebalanceListener (optional, default: None)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first">KafkaError: if not able to subscribe to topics</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>Exception</strong> – unhandled exception</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.seek">
+<code class="descname">seek</code><span class="sig-paren">(</span><em>topic_partition</em>, <em>offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.seek"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.seek" title="Permalink to this definition">¶</a></dt>
+<dd><p>seek to specific partition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>topic_partition</strong> (<em>TopicPartition</em>) – topic_partition object consists of topic and offset</li>
+<li><strong>offset</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) – offset to seek</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.assign">
+<code class="descname">assign</code><span class="sig-paren">(</span><em>topic_partitions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.assign"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.assign" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manually assign a list of TopicPartitions to this consumer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partitions</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>KafkaError</strong> – if unable to assign the partition</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.assignment">
+<code class="descname">assignment</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.assignment"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.assignment" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the TopicPartitions currently assigned to this consumer</p>
+<p>If partitions were directly assigned using
+<a class="reference internal" href="#framework.clients.kafka.Consumer.assign" title="framework.clients.kafka.Consumer.assign"><code class="xref py py-meth docutils literal notranslate"><span class="pre">assign()</span></code></a>, then this will simply return the
+same partitions that were previously assigned.  If topics were
+subscribed using <a class="reference internal" href="#framework.clients.kafka.Consumer.subscribe" title="framework.clients.kafka.Consumer.subscribe"><code class="xref py py-meth docutils literal notranslate"><span class="pre">subscribe()</span></code></a>, then this will
+give the set of topic partitions currently assigned to the consumer
+(which may be None if the assignment hasn’t happened yet, or if the
+partitions are in the process of being reassigned)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">{TopicPartition, …}</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#set" title="(in Python v2.7)">set</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.beginning_offsets">
+<code class="descname">beginning_offsets</code><span class="sig-paren">(</span><em>topic_partitions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.beginning_offsets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.beginning_offsets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the first offset for the given partitions
+This method does not change the current consumer position of the partitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partitions</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic_partitions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The earliest available offsets for the given partitions</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list({TopicPartition: int})</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>KafkaError</strong> – if not able to find the beginning offsets</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.seek_to_beginning">
+<code class="descname">seek_to_beginning</code><span class="sig-paren">(</span><em>topic_partitions</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.seek_to_beginning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.seek_to_beginning" title="Permalink to this definition">¶</a></dt>
+<dd><p>seek to beginning of the partitions</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partitions</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.pre_consume">
+<code class="descname">pre_consume</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.pre_consume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.pre_consume" title="Permalink to this definition">¶</a></dt>
+<dd><p>operation need to be performed before pre consume</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.consume">
+<code class="descname">consume</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.consume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.consume" title="Permalink to this definition">¶</a></dt>
+<dd><p>consumes the batch of messages from polling</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.post_consume">
+<code class="descname">post_consume</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.post_consume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.post_consume" title="Permalink to this definition">¶</a></dt>
+<dd><p>operation need to performed after consuming the message</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="framework.clients.kafka.Consumer.create_external_commit_dao">
+<em class="property">static </em><code class="descname">create_external_commit_dao</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.create_external_commit_dao"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.create_external_commit_dao" title="Permalink to this definition">¶</a></dt>
+<dd><p>create external commit client object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>config</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – config of redis</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">external commit client object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">KafkaRedisOffsetCommitDAO</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.external_commit">
+<code class="descname">external_commit</code><span class="sig-paren">(</span><em>topic_partition_offset=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.external_commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.external_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the offset to external client</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – Topic Partition Offset object</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ConnectionError</strong> – if unable to connect to redis</li>
+<li><strong>TimeoutError</strong> – if timeout has occurred</li>
+<li><strong>Exception</strong> – if unhandled exception has occurred</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.internal_commit">
+<code class="descname">internal_commit</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.internal_commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.internal_commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the last read offsets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>list</em><em>(</em><em>TopicPartitionOffset</em><em>)</em>) – list of topic, partition, tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>CommitFailedError</strong> – if unable to commit to kafka. it occurs when consumer rebalanced happened</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.commit_async">
+<code class="descname">commit_async</code><span class="sig-paren">(</span><em>offsets=None</em>, <em>callback=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.commit_async"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.commit_async" title="Permalink to this definition">¶</a></dt>
+<dd><p>Commit offsets to kafka_client asynchronously, optionally firing callback
+This commits offsets only to Kafka
+The offsets committed using this API will be used on the first fetch after every rebalance and also on startup
+As such, if you need to store offsets in anything other than Kafka, this API should not be used
+To avoid re-processing the last message read if a consumer is restarted, the committed offset should be the next message your application should consume, i.e.: last_offset + 1</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>offsets</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a><em>, </em><em>optional</em>) – dictionary of TopicPartition and OffsetAndMetadata</li>
+<li><strong>callback</strong> (<em>function</em><em>, </em><em>optional</em>) – Called as callback(offsets, response)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>CommitFailedError</strong> – if unable to commit to kafka. it occurs when consumer rebalanced happened</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.commit">
+<code class="descname">commit</code><span class="sig-paren">(</span><em>topic_partition_offset=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.commit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.commit" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the offsets to either internal client or external client</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – Topic Partition Offset object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.partitions_for_topic">
+<code class="descname">partitions_for_topic</code><span class="sig-paren">(</span><em>topic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.partitions_for_topic"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.partitions_for_topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get metadata about the partitions for a given topic</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Topic to check</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Partition ids</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#set" title="(in Python v2.7)">set</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.on_partitions_assigned">
+<code class="descname">on_partitions_assigned</code><span class="sig-paren">(</span><em>assigned</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.on_partitions_assigned"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.on_partitions_assigned" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of assigned partitions after each consumer rebalance operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>assigned</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.on_partitions_revoked">
+<code class="descname">on_partitions_revoked</code><span class="sig-paren">(</span><em>revoked</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.on_partitions_revoked"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.on_partitions_revoked" title="Permalink to this definition">¶</a></dt>
+<dd><p>list of partitions revoked after each consumer rebalance operation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>revoked</strong> (<em>list</em><em>(</em><em>TopicPartition</em><em>)</em>) – list of topic partition objects</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.get_rebalance_listener">
+<code class="descname">get_rebalance_listener</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.get_rebalance_listener"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.get_rebalance_listener" title="Permalink to this definition">¶</a></dt>
+<dd><p>return the object of ConsumerRebalanceListener</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.deserialize_message">
+<code class="descname">deserialize_message</code><span class="sig-paren">(</span><em>message</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.deserialize_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.deserialize_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>deserialize the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.Consumer.close">
+<code class="descname">close</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/kafka_consumer.html#Consumer.close"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.Consumer.close" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the consumer, we can commit the messages if needed before closing</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="framework.clients.kafka.TopicPartitionOffset">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.</code><code class="descname">TopicPartitionOffset</code><span class="sig-paren">(</span><em>topic</em>, <em>partition</em>, <em>offset</em><span class="sig-paren">)</span><a class="headerlink" href="#framework.clients.kafka.TopicPartitionOffset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></p>
+<p>Create new instance of TopicPartitionOffset(topic, partition, offset)</p>
+<dl class="attribute">
+<dt id="framework.clients.kafka.TopicPartitionOffset.offset">
+<code class="descname">offset</code><a class="headerlink" href="#framework.clients.kafka.TopicPartitionOffset.offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 2</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="framework.clients.kafka.TopicPartitionOffset.partition">
+<code class="descname">partition</code><a class="headerlink" href="#framework.clients.kafka.TopicPartitionOffset.partition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 1</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="framework.clients.kafka.TopicPartitionOffset.topic">
+<code class="descname">topic</code><a class="headerlink" href="#framework.clients.kafka.TopicPartitionOffset.topic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias for field number 0</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="framework.clients.kafka.KafkaRedisOffsetCommitDAO">
+<em class="property">class </em><code class="descclassname">framework.clients.kafka.</code><code class="descname">KafkaRedisOffsetCommitDAO</code><span class="sig-paren">(</span><em>pooled_redis_connection</em>, <em>namespace=None</em>, <em>delimiter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.KafkaRedisOffsetCommitDAO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#framework.clients.kafka.dao.KafkaDAO" title="framework.clients.kafka.dao.KafkaDAO"><code class="xref py py-class docutils literal notranslate"><span class="pre">framework.clients.kafka.dao.KafkaDAO</span></code></a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pooled_redis_connection</strong> (<em>MySQLPool</em>) – pooled mysql connection client</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="framework.clients.kafka.KafkaRedisOffsetCommitDAO.commit_offset">
+<code class="descname">commit_offset</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.commit_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.KafkaRedisOffsetCommitDAO.commit_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>commit the offsets synchronously</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – TopicPartitionOffset object consists of topic, partition, offset</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">boolean value for success or failure</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.KafkaRedisOffsetCommitDAO.get_all_topics_partitions_offset">
+<code class="descname">get_all_topics_partitions_offset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.get_all_topics_partitions_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.KafkaRedisOffsetCommitDAO.get_all_topics_partitions_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all topics partitions offsets</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">list of TopicPartitionOffset object</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list(TopicPartitionOffset)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.KafkaRedisOffsetCommitDAO.get_topic_all_partitions_offset">
+<code class="descname">get_topic_all_partitions_offset</code><span class="sig-paren">(</span><em>topic</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.get_topic_all_partitions_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.KafkaRedisOffsetCommitDAO.get_topic_all_partitions_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all topic partitions offset</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – topic name to get partitions and offsets</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of TopicPartitionOffset object</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(TopicPartitionOffset)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.KafkaRedisOffsetCommitDAO.get_topic_partition_offset">
+<code class="descname">get_topic_partition_offset</code><span class="sig-paren">(</span><em>topic_partition_offset</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.get_topic_partition_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.KafkaRedisOffsetCommitDAO.get_topic_partition_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the offset for the specified topic and partition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>topic_partition_offset</strong> (<em>TopicPartitionOffset</em>) – TopicPartitionOffset object with topic and partition</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">record of TopicPartitionOffset</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">TopicPartitionOffset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.clients.kafka.KafkaRedisOffsetCommitDAO.create_topic_partition_list">
+<code class="descname">create_topic_partition_list</code><span class="sig-paren">(</span><em>keys_with_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/clients/kafka/redis_commit.html#KafkaRedisOffsetCommitDAO.create_topic_partition_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.clients.kafka.KafkaRedisOffsetCommitDAO.create_topic_partition_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>create topic partition offset list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>keys_with_values</strong> (<em>list</em><em>(</em><em>tuple</em><em>(</em><em>key</em><em>, </em><em>value</em><em>)</em><em>)</em>) – list of tuple</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">list of TopicPartitionOffset objects consists of topic partition and offset</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">list(TopicPartitionOffset)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">kafka_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">API</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="framework.html">framework package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="framework.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="framework.abstract_client.html">framework.abstract_client package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="framework.clients.html">framework.clients package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="framework.utils.html">framework.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#module-framework.AppMain">framework.AppMain module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#module-framework.clients_initializations">framework.clients_initializations module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#module-framework.container">framework.container module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#module-framework.exceptions">framework.exceptions module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#module-framework.version">framework.version module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#module-framework.worker">framework.worker module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="framework.html#module-framework">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">license</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">support</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">framework</a><ul>
+  <li><a href="framework.html">framework package</a><ul>
+  <li><a href="framework.clients.html">framework.clients package</a><ul>
+      <li>Previous: <a href="framework.clients.influxdb.html" title="previous chapter">framework.clients.influxdb package</a></li>
+      <li>Next: <a href="framework.clients.splunk.html" title="next chapter">framework.clients.splunk package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, pavan.tummalapalli@gmail.com.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/framework.clients.kafka.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
