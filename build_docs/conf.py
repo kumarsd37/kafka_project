@@ -19,8 +19,7 @@
 #
 from sphinx.domains.python import PythonDomain
 
-project_path = '/home/pavan/code/kafka_project'
-
+project_path = '../'
 
 import os
 import sys
