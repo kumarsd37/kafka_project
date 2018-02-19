@@ -23,7 +23,7 @@ class KafkaRedisOffsetCommitDAO(KafkaDAO):
         try:
             key = '-'.join([topic_partition_offset.topic, str(topic_partition_offset.partition)])
             value = {
-                'offset': topic_partition_offset.offset,
+                'offset': topic_partition_offset.offset+1,
                 'last_committed_time': current_time_in_milliseconds()
             }
             response = self.pooled_redis_connection.hm_set(name=key, hash_map=value, namespace=self.namespace, delimiter=self.delimiter)
@@ -34,9 +34,8 @@ class KafkaRedisOffsetCommitDAO(KafkaDAO):
 
     def get_all_topics_partitions_offset(self):
         """
-        .. :function:: get_all_topics_partitions_offset(self)
-
         Get all topics partitions offsets
+
         :return: list of TopicPartitionOffset object
         :rtype: list(TopicPartitionOffset)
         """
@@ -58,9 +57,8 @@ class KafkaRedisOffsetCommitDAO(KafkaDAO):
     def get_topic_all_partitions_offset(self, topic):
 
         """
-        .. :function:: get_topic_all_partitions_offset(self, topic_partition_offset)
-
         Get all topic partitions offset
+
         :param topic: topic name to get partitions and offsets
         :type topic: str
         :return: list of TopicPartitionOffset object
@@ -79,8 +77,6 @@ class KafkaRedisOffsetCommitDAO(KafkaDAO):
 
     def get_topic_partition_offset(self, topic_partition_offset):
         """
-        .. :function:: get_topic_partition_offset(self, topic_partition_offset)
-
         Get the offset for the specified topic and partition
 
         :param topic_partition_offset: TopicPartitionOffset object with topic and partition
@@ -103,6 +99,7 @@ class KafkaRedisOffsetCommitDAO(KafkaDAO):
     def create_topic_partition_list(self, keys_with_values):
         """
         create topic partition offset list
+
         :param keys_with_values: list of tuple
         :type keys_with_values: list(tuple(key, value))
         :return: list of TopicPartitionOffset objects consists of topic partition and offset
