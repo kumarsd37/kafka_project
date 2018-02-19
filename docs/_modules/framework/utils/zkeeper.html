@@ -1,0 +1,160 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>framework.utils.zkeeper &#8212; kafka_project 1.0.0-dev documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../../../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for framework.utils.zkeeper</h1><div class="highlight"><pre>
+<span></span><span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;pavan.tummalapalli&#39;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">kazoo.client</span> <span class="k">import</span> <span class="n">KazooClient</span><span class="p">,</span> <span class="n">KazooState</span><span class="p">,</span> <span class="n">KazooRetry</span>
+<span class="kn">from</span> <span class="nn">kazoo.exceptions</span> <span class="k">import</span> <span class="n">NoNodeError</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ZkClient"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.zkeeper.ZkClient">[docs]</a><span class="k">class</span> <span class="nc">ZkClient</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">zkConfig</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param zkConfig:</span>
+<span class="sd">        :type zkConfig:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span> <span class="ow">or</span> <span class="n">logger</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">zkHost</span> <span class="o">=</span> <span class="n">zkConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;host&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">zkConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;timeout&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_only</span> <span class="o">=</span> <span class="n">zkConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;read_only&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retrySettings</span> <span class="o">=</span> <span class="n">zkConfig</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;retry&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kazooRetry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__getKazooRetry</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zk</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ZkClient.start"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.zkeeper.ZkClient.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zk</span> <span class="o">=</span> <span class="n">KazooClient</span><span class="p">(</span><span class="n">hosts</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">zkHost</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">,</span> <span class="n">connection_retry</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">kazooRetry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zk</span><span class="o">.</span><span class="n">add_listener</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__stateListener</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zk</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__getKazooRetry</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kazooRetry</span> <span class="o">=</span> <span class="n">KazooRetry</span><span class="p">(</span><span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">retrySettings</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">kazooRetry</span>
+
+<div class="viewcode-block" id="ZkClient.getTopicPartitions"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.zkeeper.ZkClient.getTopicPartitions">[docs]</a>    <span class="k">def</span> <span class="nf">getTopicPartitions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topic</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        list all the partitions for the topic specified</span>
+
+<span class="sd">        :param topic: topic name</span>
+<span class="sd">        :type topic: str</span>
+<span class="sd">        :return: partitions</span>
+<span class="sd">        :rtype: list</span>
+
+<span class="sd">        :raises Exception</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">zkTopicPartitionsPath</span> <span class="o">=</span> <span class="s1">&#39;/brokers/topics/&#39;</span> <span class="o">+</span> <span class="n">topic</span> <span class="o">+</span> <span class="s1">&#39;/partitions&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">zk</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">zkTopicPartitionsPath</span><span class="p">):</span>
+            <span class="n">partitions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">zk</span><span class="o">.</span><span class="n">get_children</span><span class="p">(</span><span class="n">zkTopicPartitionsPath</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">NoNodeError</span><span class="p">(</span><span class="s2">&quot; Node doesn&#39;t exists&quot;</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">partitions</span>
+
+<div class="viewcode-block" id="ZkClient.stop"><a class="viewcode-back" href="../../../api/framework.utils.html#framework.utils.zkeeper.ZkClient.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">zk</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__stateListener</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="o">==</span> <span class="n">KazooState</span><span class="o">.</span><span class="n">LOST</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Connection lost to zookeeper&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">state</span> <span class="o">==</span> <span class="n">KazooState</span><span class="o">.</span><span class="n">SUSPENDED</span><span class="p">:</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Connection to zookeeper suspended&quot;</span><span class="p">)</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">kafka_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api/modules.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../license.html">license</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../support.html">support</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, pavan.tummalapalli@gmail.com.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

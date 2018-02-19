@@ -1,12 +1,15 @@
-from setuptools import setup
+from setuptools import setup, find_packages
+
+
+exec(open('framework/version.py').read())
 
 with open('requirements.txt', 'r') as fh:
     required_packages = fh.read().splitlines()
 
 setup(
     name='kafka_project',
-    version='1.0',
-    packages=['framework'], # todo change package name
+    version=__version__,
+    packages=find_packages(), # todo change package name
     url='https://github.com/pavan538/kafka_project',
     license='MIT',
     author='pavan, himanshu, amit, dwaip',

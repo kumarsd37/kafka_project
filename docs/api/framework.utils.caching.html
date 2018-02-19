@@ -1,0 +1,350 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>framework.utils.caching package &#8212; kafka_project 1.0.0-dev documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="framework-utils-caching-package">
+<h1>framework.utils.caching package<a class="headerlink" href="#framework-utils-caching-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-framework.utils.caching.redis_pool">
+<span id="framework-utils-caching-redis-pool-module"></span><h2>framework.utils.caching.redis_pool module<a class="headerlink" href="#module-framework.utils.caching.redis_pool" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection">
+<em class="property">class </em><code class="descclassname">framework.utils.caching.redis_pool.</code><code class="descname">RedisPoolConnection</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/2/library/functions.html#object" title="(in Python v2.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>connection pool to manage connections to a Redis server. By default, each Redis instance you create will
+in turn create its own connection pool. You can override this behavior and use an existing connection
+pool by passing an already created connection pool instance to the connection_pool argument of the
+Redis class.</p>
+<p>By default redis open 16 db’s while creating connection. we can specify specific db number to open it.</p>
+<p>create redis connection with pooling</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Keyword Arguments:</th></tr>
+<tr class="field-odd field"><td>&#160;</td><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<ul class="simple">
+<li><em>host</em> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – hostname for redis</li>
+<li><em>port</em> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – port for redis</li>
+<li><em>password</em> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – password , Default None</li>
+<li><em>db_number</em> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – db number from 0-15</li>
+<li><em>max_connections</em> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – maximum number of connections for pooling</li>
+</ul>
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>key=None</em>, <em>value=None</em>, <em>namespace=None</em>, <em>delimiter=':'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the value for given key</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – key to set</li>
+<li><strong>value</strong> (<em>Any</em>) – value to set for a given key</li>
+<li><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – common prefix for set of keys, which uniquely identifies the set of keys from all keys</li>
+<li><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – used in between joining namespace and key</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">return True if success, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ConnectionError, TimeoutError, Exception</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>key=None</em>, <em>namespace=None</em>, <em>delimiter=':'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the value based on key</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – key to search</li>
+<li><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – common prefix for set of keys, which uniquely identifies the set of keys from all keys.</li>
+<li><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – used in between joining namespace and key</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">value of the key</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">Any</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ConnectionError, TimeoutError, Exception</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.get_all_keys_values">
+<code class="descname">get_all_keys_values</code><span class="sig-paren">(</span><em>regex='*'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.get_all_keys_values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.get_all_keys_values" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all the keys. if we specify the namespace it will get from that namespace</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>regex</strong> (<em>Union</em><em>(</em><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>, </em><em>optional</em><em>)</em>) – regex for identifying the keys</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary of all keys with values</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">ConnectionError, TimeoutError, Exception</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.get_all_hash_maps">
+<code class="descname">get_all_hash_maps</code><span class="sig-paren">(</span><em>regex='*'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.get_all_hash_maps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.get_all_hash_maps" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all hash_maps available in the redis.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is used only when you know the specific type of keys are hash based keys which are matching regex</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>regex</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – regular expression to check the keys(default: ‘*’)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body">ConnectionError, TimeoutError, WatchError, Exception</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.hm_set">
+<code class="descname">hm_set</code><span class="sig-paren">(</span><em>name=None</em>, <em>hash_map=None</em>, <em>namespace=None</em>, <em>delimiter=':'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.hm_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.hm_set" title="Permalink to this definition">¶</a></dt>
+<dd><p>store the python dict object in Redis hash_map format in redis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the hash_map</li>
+<li><strong>hash_map</strong> (<a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)"><em>dict</em></a>) – dict object to store</li>
+<li><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – common prefix for set of keys, which uniquely identifies the set of keys among all the keys.</li>
+<li><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – used in between joining namespace and hash_map name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">return True if success, else False</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/2/library/functions.html#bool" title="(in Python v2.7)">bool</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ConnectionError, TimeoutError, Exception</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.h_set">
+<code class="descname">h_set</code><span class="sig-paren">(</span><em>name=None</em>, <em>specific_key=None</em>, <em>value=None</em>, <em>namespace=None</em>, <em>delimiter=':'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.h_set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.h_set" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.h_get">
+<code class="descname">h_get</code><span class="sig-paren">(</span><em>name=None</em>, <em>specific_key=None</em>, <em>namespace=None</em>, <em>delimiter=':'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.h_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.h_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the value of the particular key of hash_map or dict</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the hash_map</li>
+<li><strong>specific_key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – specific key to check in hash_map</li>
+<li><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – common prefix for set of keys, which uniquely identifies the set of keys among all the keys.</li>
+<li><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – used in between joining namespace and hash_map name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">value of the key</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">Any</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ConnectionError, TimeoutError, Exception</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.hm_get">
+<code class="descname">hm_get</code><span class="sig-paren">(</span><em>name=None</em>, <em>namespace=None</em>, <em>delimiter=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.hm_get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.hm_get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get the dict object stored as hash_map in redis by hash_map name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the hash_map</li>
+<li><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – common prefix for set of keys, which uniquely identifies the set of keys among all the keys.</li>
+<li><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – used in between joining namespace and hash_map name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">dict object which is stored as hash_map in redis</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><a class="reference external" href="https://docs.python.org/2/library/stdtypes.html#dict" title="(in Python v2.7)">dict</a></p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ConnectionError, TimeoutError, Exception</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="framework.utils.caching.redis_pool.RedisPoolConnection.get_key_with_or_without_namespace">
+<em class="property">static </em><code class="descname">get_key_with_or_without_namespace</code><span class="sig-paren">(</span><em>namespace=None</em>, <em>delimiter=':'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/framework/utils/caching/redis_pool.html#RedisPoolConnection.get_key_with_or_without_namespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#framework.utils.caching.redis_pool.RedisPoolConnection.get_key_with_or_without_namespace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the key with namespace has prefix. if no namespace is provided it will return the key</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>key</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – name of the key</li>
+<li><strong>namespace</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – common prefix for set of keys, which uniquely identifies the set of keys among all the keys.</li>
+<li><strong>delimiter</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – used in between joining namespace and hash_map name</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">key with or without namespace</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)">str</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-framework.utils.caching">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-framework.utils.caching" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">kafka_project</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../install.html">install</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../compatibility.html">compatibility</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tests.html">tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../license.html">license</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../support.html">support</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, pavan.tummalapalli@gmail.com.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="../_sources/api/framework.utils.caching.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

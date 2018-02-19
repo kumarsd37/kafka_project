@@ -1,0 +1,59 @@
+{
+
+    "num_of_workers": 3,
+    "inbound_client_settings": {
+        "name":"kafka_consumer",
+        "config": {
+            "topics": ["ARTICLE"],
+            "max_retries": 3,
+            "max_records": 1,
+            "poll_timeout": 500,
+            "close_timeout": 5,
+            "enable_external_commit": true,
+            "external_commit_config":{
+              "redis":{
+                "namespace": "kafka",
+                "delimiter": ":",
+                "client_config" : {
+                  "host": "localhost",
+                  "port": 6379,
+                  "password": null,
+                  "db_number": null,
+                  "max_connections": 2
+                }
+              }
+            },
+            "client_config":{
+                "bootstrap_servers": "172.16.15.227:9092",
+                "group_id": "ARTICLE_CG_GRP",
+                "enable_auto_commit": false,
+                "session_timeout_ms": 27000,
+                "heartbeat_interval_ms": 9000,
+                "auto_offset_reset": "earliest"
+        	    }
+        	}
+    	},
+    "outbound_client_settings": {
+        "name": "kafka_producer",
+        "config": {
+            "topic": "ARTICLE",
+            "future_timeout": 5,
+            "close_timeout": 5,
+            "client_config": {
+                "bootstrap_servers": "172.16.15.227:9092",
+                "acks": 1,
+                "retries": 1,
+                "batch_size": 16384,
+                "linger_ms": 5,
+                "buffer_memory": 33554432,
+                "connections_max_idle_ms": 54000,
+                "max_block_ms": 60000,
+                "max_request_size": 1048576,
+                "metadata_max_age_ms": 300000,
+                "retry_backoff_ms": 100,
+                "request_timeout_ms": 30000,
+                "max_in_flight_requests_per_connection": 5
+            }
+        }
+    }
+}

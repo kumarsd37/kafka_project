@@ -12,3 +12,12 @@ framework/abstract_client/__pycache__/
 framework/clients/__pycache__/
 framework/clients/file/__pycache__/
 framework/clients/kafka/__pycache__/
+
+/.tox/*
+/.pytest_cache/
+/build/
+/dist/
+/build_docs/
+/kafka_project.egg-info/
+.tox/
+

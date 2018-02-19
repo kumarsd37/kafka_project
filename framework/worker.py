@@ -1,7 +1,5 @@
-__author__ = 'pavan.tummalapalli'
-
-from threading import Thread, Event
 import logging
+from threading import Thread, Event
 
 from framework.clients_initializations import client_initialize_mappings
 
@@ -29,10 +27,12 @@ class Worker(Thread):
         """
         try:
             result = self.message_processor(message)
-            logger.debug('result returned by message processor {}'.format(result))
+            logger.debug('result by message processor {}'.format(result))
             self.outbound_client.send(result)
         except Exception as exc:
             logger.error(exc, exc_info=True)
+        finally:
+            self.inbound_client.post_consume(message)
 
     def run(self):
         try:
@@ -44,14 +44,14 @@ class Worker(Thread):
             self.inbound_client = inbound_initialize_client(**self.inbound_client_settings.get('config'))
             self.outbound_client = outbound_initialize_client(**self.outbound_client_settings.get('config'))
             self.event.set()
-            self.loop()
         except KeyError as exc:
             logger.error(exc, exc_info=True)
             raise exc
         except Exception as exc:
             logger.error(exc, exc_info=True)
             raise exc
-
+        try:
+            self.loop()
         finally:
             self.close()
 
@@ -60,6 +60,7 @@ class Worker(Thread):
             self.event.clear()
 
     def loop(self):
+
         while True:
             messages = self.inbound_client.consume()
             if messages is not None:

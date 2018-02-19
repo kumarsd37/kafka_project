@@ -12,7 +12,6 @@ from framework.abstract_client import AbstractProducer
 logger = logging.getLogger(__name__)
 
 
-
 class FileWriter(AbstractProducer):
     """ class for writing to a file with concurrent support """
 

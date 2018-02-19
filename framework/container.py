@@ -21,7 +21,7 @@ class Container:
     def create_container(msg_processor, settings_json):
         #__class__.__error_handler = error_handler
         try:
-            kwargs = json.loads(settings_json)
+            kwargs = settings_json
 
         except json.JSONDecodeError as exc:
             raise exc
