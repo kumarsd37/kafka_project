@@ -4,14 +4,14 @@ import fastavro as avro
 
 def write(records=None, schema=None):
     """
-    serialize message with schema.
+    serialize message with schema
 
-    :param schema: avro schema
-    :type dict
     :param records: list of messages
-    :type message: list
-    :return serialized message: serialized message
-    :rtype bytes
+    :type records: list
+    :param schema: avro schema
+    :type schema: dict
+    :return: serialized message
+    :rtype: bytearray
     """
     try:
         out = io.BytesIO()
@@ -23,14 +23,14 @@ def write(records=None, schema=None):
 
 def read(records=None, schema=None):
     """
-    deserialize message using schema
+    deserialize message with or without schema
 
+    :param records: list of messages
+    :type records: list
     :param schema: avro schema
-    :type dict
-    :param message: message to be serialized
-    :type message: string
-    :return: deserialized message: avro deserialized message
-
+    :type schema: dict
+    :return: deserialized message
+    :rtype: Fastavro Iterator Object
     """
     try:
         op = io.BytesIO(records)
