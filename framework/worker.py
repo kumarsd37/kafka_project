@@ -26,13 +26,15 @@ class Worker(Thread):
         :rtype:
         """
         try:
+            logger.debug('raw record {}'.format(message))
             result = self.message_processor(message)
             logger.debug('result by message processor {}'.format(result))
             self.outbound_client.send(result)
+            self.inbound_client.post_consume(message)
         except Exception as exc:
             logger.error(exc, exc_info=True)
         finally:
-            self.inbound_client.post_consume(message)
+            pass
 
     def run(self):
         try:
