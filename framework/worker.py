@@ -1,12 +1,7 @@
-import threading
-
-__author__ = 'pavan.tummalapalli'
-
-from threading import Thread, Event
 import logging
+from threading import Thread, Event
 
 from framework.clients_initializations import client_initialize_mappings
-from framework.clients.kafka import TopicPartitionOffset
 
 logger = logging.getLogger(__name__)
 
