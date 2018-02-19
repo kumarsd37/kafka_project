@@ -68,7 +68,7 @@ class SplunkClient:
             * *params* (``dict``) --
               index(``str``), source(``str``), and sourcetype(``str``)
 
-        :raises HttpError
+        :raises: HttpError
 
         """
 
