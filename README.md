@@ -19,6 +19,11 @@ automatically.
 ## Architecture
 ![Image of multiclient_processor](docs/images/multi_client_processor.jpg)
 
+## prerequisites
+
+- [Kafka](https://kafka.apache.org/downloads)
+- [redis](https://redis.io/download)  - **if we use redis has external commit source**
+
 ## Installation:
 
 ```
