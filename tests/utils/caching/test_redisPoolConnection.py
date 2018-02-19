@@ -72,8 +72,8 @@ class TestRedisPoolConnection(TestCase):
         for i in range(0, 1000):
             key = 'key-' + str(i)
             value = 'value-' + str(i)
-            self.redis_connection.set(namespace='test', key=key, value=value)
-        response = self.redis_connection.get_all_keys_values(regex='test*')
+            self.redis_connection.set(namespace='redis_pool_test', key=key, value=value)
+        response = self.redis_connection.get_all_keys_values(regex='redis_pool_test*')
         response_list = list(response)
         self.assertEqual(len(response_list), 1000)
 

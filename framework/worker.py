@@ -21,9 +21,7 @@ class Worker(Thread):
         """
         process the message using processor and dispatch the processed result to outbound client.
         :param message: message to be processed
-        :type message:
-        :return:
-        :rtype:
+        :type message: Any
         """
         try:
             logger.debug('raw record {}'.format(message))
@@ -37,6 +35,7 @@ class Worker(Thread):
             pass
 
     def run(self):
+        """ starting part of the worker thread/process """
         try:
             inbound_client_name = self.inbound_client_settings['name']
             outbound_client_name = self.outbound_client_settings['name']
@@ -76,7 +75,6 @@ class Worker(Thread):
         self.inbound_client.close()
         self.outbound_client.close()
 
-# todo: need to work with post_send()
 # this need to be configurable from worker settings.
 
 

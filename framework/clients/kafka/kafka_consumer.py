@@ -50,6 +50,7 @@ class Consumer(AbstractConsumer):
         self.client_config = kwargs.get('client_config')
 
         assert self.client_config.get('group_id'), 'group_id should not be None'
+        self.group_id = self.client_config.get('group_id')
 
         # initialize the auto commit by getting the enable auto commit value from config
         # if client config has no auto commit set by default it will be False.
@@ -241,8 +242,7 @@ class Consumer(AbstractConsumer):
             except Exception as exc:
                 logger.error(exc.__str__(), exc_info = True)
 
-    @staticmethod
-    def create_external_commit_dao(config):
+    def create_external_commit_dao(self, config):
         """
         create external commit client object
 
@@ -255,10 +255,11 @@ class Consumer(AbstractConsumer):
         from .redis_commit import KafkaRedisOffsetCommitDAO
         try:
             redis_config = config['redis']['client_config']
+            consumer_group = self.group_id
             namespace = config.get('redis').get('namespace')
             delimiter = config['redis'].get('delimiter') or ':'
             redis_pooled_connection = RedisPoolConnection(**redis_config)
-            kafka_redis_offset_commit_dao = KafkaRedisOffsetCommitDAO(redis_pooled_connection, namespace=namespace, delimiter=delimiter)
+            kafka_redis_offset_commit_dao = KafkaRedisOffsetCommitDAO(redis_pooled_connection, consumer_group=consumer_group, namespace=namespace, delimiter=delimiter)
             return kafka_redis_offset_commit_dao
         except (KeyError, Exception) as exc:
             logger.error(exc.__str__())
