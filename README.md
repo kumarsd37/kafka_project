@@ -26,7 +26,12 @@ automatically.
 
 ## Installation:
 
+**ubuntu:**
+```bash
+apt-get install python3-pip python3.5-dev build-essential
 ```
+
+```bash
 git clone https://github.com/pavan538/kafka_project.git
 cd kafka_project
 python setup.py install
@@ -125,8 +130,6 @@ outbound_client_settings = {
 }
 ```
 - For **File** outbound client, for each worker the output file will be appended with thread id as suffix.
-
-
 
 
 ### sample settings json for kafka inbound client and kafka outbound client :
